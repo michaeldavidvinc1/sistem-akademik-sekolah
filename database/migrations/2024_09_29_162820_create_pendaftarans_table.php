@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(TahunAjaran::class, 'tahun_ajaran_id');
             $table->foreignIdFor(Jurusan::class, 'jurusan_id');
             $table->date('tanggal_pendaftaran');
-            $table->string('status');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

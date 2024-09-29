@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_jurusan');
             $table->string('nama_jurusan');
-            $table->string('deskripsi');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
     }

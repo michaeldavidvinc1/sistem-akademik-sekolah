@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'user_id');
             $table->string('nama_lengkap');
             $table->date('tanggal_join');
-            $table->string('status');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

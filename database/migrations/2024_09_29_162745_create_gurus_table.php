@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('bidang_studi');
             $table->string('alamat');
             $table->string('telepon');
-            $table->date('join_date');
-            $table->string('status');
+            $table->date('tanggal_join');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

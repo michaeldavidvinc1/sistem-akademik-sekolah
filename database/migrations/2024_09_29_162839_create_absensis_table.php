@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Siswa::class, 'siswa_id');
             $table->date('tanggal');
             $table->string('status_kehadiran');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

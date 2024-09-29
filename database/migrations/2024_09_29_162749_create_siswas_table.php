@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('telepon');
             $table->date('tanggal_daftar');
-            $table->string('status');
+            $table->boolean('status');
             $table->string('jenis_kelamin');
             $table->foreignIdFor(Jurusan::class, 'jurusan_id');
             $table->foreignIdFor(Kelas::class, 'kelas_id');
