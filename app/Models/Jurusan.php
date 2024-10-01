@@ -14,4 +14,12 @@ class Jurusan extends Model
         'nama_jurusan',
         'deskripsi',
     ];
+
+    public function siswa(){
+        return $this->hasOne(Siswa::class);
+    }
+
+    public function kelas(){
+        return $this->hasOne(Kelas::class);
+    }
 }

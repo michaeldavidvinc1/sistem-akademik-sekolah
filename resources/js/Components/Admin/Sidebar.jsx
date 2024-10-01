@@ -1,4 +1,4 @@
-import { LayoutDashboard } from "lucide-react";
+import { ChevronDown, LayoutDashboard, UsersRound } from "lucide-react";
 import { Sidebar } from "primereact/sidebar";
 import React, { useState } from "react";
 
@@ -17,6 +17,28 @@ const MenuStaff = [
         label: "Dashboard Staff",
         path: route("dashboard.page"),
         icon: <LayoutDashboard className="w-5" />,
+    },
+    {
+        id: "pengguna",
+        label: "Pengguna",
+        icon: <UsersRound className="w-5" />,
+        children: [
+            {
+                id: "staff.siswa.index",
+                label: "Siswa",
+                path: route("staff.siswa.index"),
+            },
+            {
+                id: "staff.guru.index",
+                label: "Guru",
+                path: route("staff.guru.index"),
+            },
+            {
+                id: "staff.staff.index",
+                label: "Staff",
+                path: route("staff.staff.index"),
+            },
+        ],
     },
 ];
 

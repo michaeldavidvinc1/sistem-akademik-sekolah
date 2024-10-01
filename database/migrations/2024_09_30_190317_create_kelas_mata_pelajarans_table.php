@@ -14,14 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jadwal_kelas', function (Blueprint $table) {
+        Schema::create('kelas_mata_pelajarans', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Kelas::class, 'kelas_id');
-            $table->foreignIdFor(MataPelajaran::class, 'kelas_mata_pelajaran_id');
+            $table->foreignIdFor(MataPelajaran::class, 'mata_pelajaran_id');
             $table->foreignIdFor(Guru::class, 'guru_id');
-            $table->string('hari');
-            $table->time('waktu_mulai');
-            $table->time('waktu_selesai');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jadwal_kelas');
+        Schema::dropIfExists('kelas_mata_pelajarans');
     }
 };

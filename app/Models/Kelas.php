@@ -15,4 +15,12 @@ class Kelas extends Model
         'tahun_ajaran_id',
         'jurusan_id',
     ];
+
+    public function siswa(){
+        return $this->hasOne(Siswa::class);
+    }
+
+    public function jurusan(){
+        return $this->belongsTo(Jurusan::class);
+    }
 }

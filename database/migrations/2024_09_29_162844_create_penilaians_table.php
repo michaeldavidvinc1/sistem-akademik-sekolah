@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('penilaians', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Siswa::class, 'siswa_id');
-            $table->foreignIdFor(MataPelajaran::class, 'mata_pelajaran_id');
+            $table->foreignIdFor(MataPelajaran::class, 'kelas_mata_pelajaran_id');
             $table->foreignIdFor(Guru::class, 'guru_id');
             $table->string('jenis_penilaian');
             $table->date('tanggal_penilaian');
