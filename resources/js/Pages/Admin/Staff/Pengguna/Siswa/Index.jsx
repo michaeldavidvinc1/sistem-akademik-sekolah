@@ -36,13 +36,6 @@ const Index = ({ auth, siswa }) => {
                 >
                     <SquarePen className="w-4" /> Edit
                 </Link>
-                <button
-                    className="text-red-500 hover:text-red-600 flex gap-1 items-center"
-                    // onClick={() => handleDelete(rowData.id)}
-                >
-                    <Trash2 className="w-4" />
-                    Delete
-                </button>
             </div>
         );
     };

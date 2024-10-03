@@ -1,0 +1,177 @@
+import DashboardLayout from "@/Components/Admin/Layout";
+import RadioInput from "@/Components/Common/RadioInput";
+import SelectInput from "@/Components/Common/SelectInput";
+import SwitchInput from "@/Components/Common/SwitchInput";
+import TextArea from "@/Components/Common/Textarea";
+import TextInput from "@/Components/Common/TextInput";
+import { Link, useForm } from "@inertiajs/react";
+import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+
+const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
+    const toast = useRef(null);
+    const { data, setData, put, processing, errors, reset } = useForm({
+        email: siswa.data.user.email,
+        nama_lengkap: siswa.data.nama_lengkap,
+        tanggal_lahir: siswa.data.tanggal_lahir,
+        tempat_lahir: siswa.data.tempat_lahir,
+        alamat: siswa.data.alamat,
+        telepon: siswa.data.telepon,
+        tanggal_daftar: siswa.data.tanggal_daftar,
+        status: siswa.data.status,
+        jenis_kelamin: siswa.data.jenis_kelamin,
+        jurusan_id: siswa.data?.jurusan?.id,
+        kelas_id: siswa.data.kelas.id,
+    });
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        put(route("staff.siswa.update", siswa.data.id), {
+            onError: (errors) => {
+                if (errors.name) {
+                    toast.current.show({
+                        severity: "error",
+                        summary: "Error",
+                        detail: errors.name,
+                        life: 3000,
+                    });
+                }
+            },
+        });
+    };
+
+    const jk = [
+        { name: "Laki Laki", key: "L" },
+        { name: "Perempan", key: "P" },
+    ];
+
+    return (
+        <DashboardLayout auth={auth}>
+            <Toast ref={toast} />
+            <h1 className="text-xl font-semibold">Edit Kelas Page</h1>
+            <form onSubmit={submit} className="mt-5">
+                <div className="grid grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-4">
+                    <TextInput
+                        id="email"
+                        type="text"
+                        name="email"
+                        value={data.email}
+                        onChange={(e) => setData("email", e.target.value)}
+                        label="Email"
+                        errorMessage={errors.email}
+                    />
+                    <TextInput
+                        id="nama_lengkap"
+                        type="text"
+                        name="nama_lengkap"
+                        value={data.nama_lengkap}
+                        onChange={(e) =>
+                            setData("nama_lengkap", e.target.value)
+                        }
+                        label="Nama Lengkap"
+                        errorMessage={errors.nama_lengkap}
+                    />
+                    <TextInput
+                        id="tanggal_lahir"
+                        type="date"
+                        name="tanggal_lahir"
+                        value={data.tanggal_lahir}
+                        onChange={(e) =>
+                            setData("tanggal_lahir", e.target.value)
+                        }
+                        label="Tanggal Lahir"
+                        errorMessage={errors.tanggal_lahir}
+                    />
+                    <TextInput
+                        id="tempat_lahir"
+                        type="text"
+                        name="tempat_lahir"
+                        value={data.tempat_lahir}
+                        onChange={(e) =>
+                            setData("tempat_lahir", e.target.value)
+                        }
+                        label="Tempat Lahir"
+                        errorMessage={errors.tempat_lahir}
+                    />
+                    <TextInput
+                        id="telepon"
+                        type="text"
+                        name="telepon"
+                        value={data.telepon}
+                        onChange={(e) => setData("telepon", e.target.value)}
+                        label="Telepon"
+                        errorMessage={errors.telepon}
+                    />
+                    <TextInput
+                        id="tanggal_daftar"
+                        type="date"
+                        name="tanggal_daftar"
+                        value={data.tanggal_daftar}
+                        onChange={(e) =>
+                            setData("tanggal_daftar", e.target.value)
+                        }
+                        label="Tanggal Daftar"
+                        errorMessage={errors.tanggal_daftar}
+                        disabled
+                    />
+                    <SelectInput
+                        name="jurusan_id"
+                        value={data.jurusan_id}
+                        onChange={(e) => setData("jurusan_id", e.value)}
+                        label="Jurusan"
+                        errorMessage={errors.jurusan_id}
+                        options={jurusan.data}
+                        optionLabel="nama_jurusan"
+                        optionValue="id"
+                    />
+                    <SelectInput
+                        name="kelas_id"
+                        value={data.kelas_id}
+                        onChange={(e) => setData("kelas_id", e.value)}
+                        label="Kelas"
+                        errorMessage={errors.kelas_id}
+                        options={kelas.data}
+                        optionLabel="nama_kelas"
+                        optionValue="id"
+                    />
+                    <RadioInput
+                        category={jk}
+                        errorMessage={errors.kelas_id}
+                        label="Jenis Kelamin"
+                        name="jenis_kelamin"
+                        onChange={(e) => setData("jenis_kelamin", e.value)}
+                        checked={data.jenis_kelamin == jk.key}
+                    />
+                    <SwitchInput
+                        label="Status"
+                        errorMessage={errors.kelas_id}
+                        name="status"
+                        onChange={(e) => setData("status", e.value)}
+                        checked={data.status}
+                    />
+                    <TextArea
+                        id="alamat"
+                        name="alamat"
+                        value={data.alamat}
+                        onChange={(e) => setData("alamat", e.target.value)}
+                        label="Alamat"
+                        errorMessage={errors.alamat}
+                    />
+                </div>
+                <div className="flex justify-end items-center mt-3 gap-3">
+                    <Link
+                        className="px-3 py-3 hover:bg-gray-100 rounded-lg font-bold border border-gray-100"
+                        href={route("staff.tahun-ajaran.index")}
+                    >
+                        Cancel
+                    </Link>
+                    <Button type="submit" label="Update" size="small" />
+                </div>
+            </form>
+        </DashboardLayout>
+    );
+};
+
+export default EditSiswa;
