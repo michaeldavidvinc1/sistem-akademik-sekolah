@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources\CRUD;
+namespace App\Http\Resources;
 
-use App\Http\Resources\Relational\UserResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +26,10 @@ class SiswaResource extends JsonResource
             'tanggal_daftar' => $this->tanggal_daftar,
             'status' => $this->status,
             'jenis_kelamin' => $this->jenis_kelamin,
+            'jurusan' => new JurusanResource($this->whenLoaded('jurusan')),
+            'kelas' => new KelasResource($this->whenLoaded('kelas')),
+            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d'),
         ];
     }
 }

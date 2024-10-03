@@ -16,10 +16,10 @@ class Jurusan extends Model
     ];
 
     public function siswa(){
-        return $this->hasOne(Siswa::class);
+        return $this->hasMany(Siswa::class);
     }
 
     public function kelas(){
-        return $this->hasOne(Kelas::class);
+        return $this->hasMany(Kelas::class);
     }
 }

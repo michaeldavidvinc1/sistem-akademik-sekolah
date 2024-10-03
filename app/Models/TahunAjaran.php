@@ -14,4 +14,8 @@ class TahunAjaran extends Model
         'tanggal_mulai',
         'tanggal_selesai',
     ];
+
+    public function kelas(){
+        return $this->hasOne(Kelas::class);
+    }
 }

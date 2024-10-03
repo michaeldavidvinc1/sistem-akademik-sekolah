@@ -1,4 +1,9 @@
-import { ChevronDown, LayoutDashboard, UsersRound } from "lucide-react";
+import {
+    ChevronDown,
+    LayoutDashboard,
+    Settings2,
+    UsersRound,
+} from "lucide-react";
 import { Sidebar } from "primereact/sidebar";
 import React, { useState } from "react";
 
@@ -37,6 +42,33 @@ const MenuStaff = [
                 id: "staff.staff.index",
                 label: "Staff",
                 path: route("staff.staff.index"),
+            },
+        ],
+    },
+    {
+        id: "pengaturan",
+        label: "Pengaturan",
+        icon: <Settings2 className="w-5" />,
+        children: [
+            {
+                id: "staff.tahun-ajaran.index",
+                label: "Tahun Ajaran",
+                path: route("staff.tahun-ajaran.index"),
+            },
+            {
+                id: "staff.jurusan.index",
+                label: "Jurusan",
+                path: route("staff.jurusan.index"),
+            },
+            {
+                id: "staff.kelas.index",
+                label: "Kelas",
+                path: route("staff.kelas.index"),
+            },
+            {
+                id: "staff.mapel.index",
+                label: "Mata Pelajaran",
+                path: route("staff.mapel.index"),
             },
         ],
     },
