@@ -1,7 +1,6 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import RadioInput from "@/Components/Common/RadioInput";
 import SelectInput from "@/Components/Common/SelectInput";
-import SwitchInput from "@/Components/Common/SwitchInput";
 import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
 import { Link, useForm } from "@inertiajs/react";
@@ -27,7 +26,6 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
 
     const submit = (e) => {
         e.preventDefault();
-
         put(route("staff.siswa.update", siswa.data.id), {
             onError: (errors) => {
                 if (errors.name) {
@@ -43,8 +41,13 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
     };
 
     const jk = [
-        { name: "Laki Laki", key: "L" },
-        { name: "Perempan", key: "P" },
+        { name: "Laki Laki", key: "l" },
+        { name: "Perempan", key: "p" },
+    ];
+
+    const statusCom = [
+        { name: "Active", key: 1 },
+        { name: "Inactive", key: 0 },
     ];
 
     return (
@@ -142,14 +145,15 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                         label="Jenis Kelamin"
                         name="jenis_kelamin"
                         onChange={(e) => setData("jenis_kelamin", e.value)}
-                        checked={data.jenis_kelamin == jk.key}
+                        value={data.jenis_kelamin}
                     />
-                    <SwitchInput
+                    <RadioInput
+                        category={statusCom}
+                        errorMessage={errors.status}
                         label="Status"
-                        errorMessage={errors.kelas_id}
                         name="status"
                         onChange={(e) => setData("status", e.value)}
-                        checked={data.status}
+                        value={data.status}
                     />
                     <TextArea
                         id="alamat"
@@ -163,7 +167,7 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                 <div className="flex justify-end items-center mt-3 gap-3">
                     <Link
                         className="px-3 py-3 hover:bg-gray-100 rounded-lg font-bold border border-gray-100"
-                        href={route("staff.tahun-ajaran.index")}
+                        href={route("staff.siswa.index")}
                     >
                         Cancel
                     </Link>

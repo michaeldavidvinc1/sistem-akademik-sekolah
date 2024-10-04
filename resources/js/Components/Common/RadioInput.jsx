@@ -10,6 +10,7 @@ const RadioInput = ({
     name,
     onChange,
     checked,
+    value,
     ...props
 }) => {
     return (
@@ -20,13 +21,16 @@ const RadioInput = ({
             <div className="flex gap-5 items-center">
                 {category.map((category) => {
                     return (
-                        <div key={category.key} className="flex gap-1 items-center">
+                        <div
+                            key={category.key}
+                            className="flex gap-1 items-center"
+                        >
                             <RadioButton
                                 inputId={category.key}
                                 name={name}
-                                value={category}
+                                value={category.key}
                                 onChange={onChange}
-                                checked={checked}
+                                checked={value === category.key}
                             />
                             <label htmlFor={category.key} className="ml-2">
                                 {category.name}
