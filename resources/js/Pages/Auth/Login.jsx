@@ -1,12 +1,12 @@
 import TextInput from "@/Components/Common/TextInput";
+import { Button } from "@/Components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Head, useForm } from "@inertiajs/react";
 import { Eye, EyeOff } from "lucide-react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 const Login = () => {
-    const toast = useRef(null);
+    const { toast } = useToast();
     const [seePassword, setSeePassword] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
@@ -19,18 +19,16 @@ const Login = () => {
         post(route("login.store"), {
             onFinish: () => reset("password"),
             onError: (errors) => {
-                toast.current.show({
-                    severity: "error",
-                    summary: "Error",
-                    detail: errors.message,
-                    life: 3000,
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: errors.message,
                 });
             },
         });
     };
     return (
         <>
-            <Toast ref={toast} />
             <Head title="Login" />
             <div className="flex h-screen">
                 <div
@@ -76,9 +74,8 @@ const Login = () => {
                                         label="Password"
                                         errorMessage={errors.password}
                                     />
-                                    <Button
-                                        className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center focus:border-[#BADDFF] text-[#BADDFF]"
-                                        type="button"
+                                    <span
+                                        className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center cursor-pointer"
                                         onClick={() =>
                                             setSeePassword(!seePassword)
                                         }
@@ -89,14 +86,13 @@ const Login = () => {
                                         ) : (
                                             <EyeOff className="w-5 h-5" />
                                         )}
-                                    </Button>
+                                    </span>
                                 </div>
                                 <div className="flex items-center justify-end mt-4">
                                     <Button
                                         type="submit"
                                         disabled={processing}
                                         className="font-semibold text-sm"
-                                        size="small"
                                     >
                                         Log in
                                     </Button>

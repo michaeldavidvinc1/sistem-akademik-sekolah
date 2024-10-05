@@ -1,6 +1,6 @@
 import React from "react";
 import InputError from "./InputError";
-import { InputTextarea } from "primereact/inputtextarea";
+import { Textarea } from "../ui/textarea";
 
 const TextArea = ({
     name,
@@ -17,7 +17,7 @@ const TextArea = ({
             <label className="text-sm font-bold" htmlFor={name}>
                 {label}
             </label>
-            <InputTextarea
+            <Textarea
                 id={id}
                 name={name}
                 value={value}

@@ -1,30 +1,58 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import Datatable from "@/Components/Common/Datatable";
+import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
-import { SquarePen, Trash2 } from "lucide-react";
+import { ArrowUpDown, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
 import Swal from "sweetalert2";
 
 const columns = [
     {
-        field: "tahun_ajaran",
-        header: "Tahun Ajaran",
-        sortable: true,
+        accessorKey: "no",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    No
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => row.index + 1,
     },
     {
-        field: "tanggal_mulai",
+        accessorKey: "tahun_ajaran",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    Tahun Ajaran
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+    },
+    {
+        accessorKey: "tanggal_mulai",
         header: "Tanggal Mulai",
     },
     {
-        field: "tanggal_selesai",
+        accessorKey: "tanggal_selesai",
         header: "Tanggal Selesai",
     },
     {
-        field: "created_at",
-        header: "Created at",
+        accessorKey: "created_at",
+        header: "Created At",
     },
 ];
-
 const Index = ({ auth, tahunAjaran }) => {
     const handleDelete = (id) => {
         Swal.fire({
@@ -71,11 +99,7 @@ const Index = ({ auth, tahunAjaran }) => {
                     Add Data
                 </Link>
             </div>
-            <Datatable
-                data={tahunAjaran.data}
-                column={columns}
-                actionTemplate={actionTemplate}
-            />
+            <Datatable columns={columns} data={tahunAjaran.data} />
         </DashboardLayout>
     );
 };

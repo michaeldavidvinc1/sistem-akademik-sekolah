@@ -1,31 +1,60 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import Datatable from "@/Components/Common/Datatable";
+import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
-import { SquarePen, Trash2 } from "lucide-react";
+import { ArrowUpDown, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
 import Swal from "sweetalert2";
 
 const columns = [
     {
-        field: "nama_kelas",
-        header: "Nama Kelas",
-        sortable: true,
+        accessorKey: "no",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    No
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => row.index + 1,
     },
     {
-        field: "kapasitas",
-        header: "Kapasitas Kelas",
+        accessorKey: "nama_kelas",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    Nama Kelas
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
     },
     {
-        field: "tahun_ajaran.tahun_ajaran",
+        accessorKey: "kapasitas",
+        header: "Kapasitas",
+    },
+    {
+        accessorKey: "tahun_ajaran.tahun_ajaran",
         header: "Tahun Ajaran",
     },
     {
-        field: "jurusan.nama_jurusan",
-        header: "Nama Jurusan",
+        accessorKey: "jurusan.nama_jurusan",
+        header: "Jurusan",
     },
     {
-        field: "created_at",
-        header: "Created at",
+        accessorKey: "created_at",
+        header: "Created At",
     },
 ];
 
@@ -75,11 +104,7 @@ const Index = ({ auth, kelas }) => {
                     Add Data
                 </Link>
             </div>
-            <Datatable
-                data={kelas.data}
-                column={columns}
-                actionTemplate={actionTemplate}
-            />
+            <Datatable columns={columns} data={kelas.data} />
         </DashboardLayout>
     );
 };

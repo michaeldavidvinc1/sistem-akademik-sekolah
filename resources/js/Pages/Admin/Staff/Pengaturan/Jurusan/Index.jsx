@@ -1,22 +1,51 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import Datatable from "@/Components/Common/Datatable";
+import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
-import { SquarePen, Trash2 } from "lucide-react";
+import { ArrowUpDown, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
 import Swal from "sweetalert2";
 
 const columns = [
     {
-        field: "kode_jurusan",
-        header: "Kode Jurusan",
-        sortable: true,
+        accessorKey: "no",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    No
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => row.index + 1,
     },
     {
-        field: "nama_jurusan",
+        accessorKey: "kode_jurusan",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    Kode Jurusan
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+    },
+    {
+        accessorKey: "nama_jurusan",
         header: "Nama Jurusan",
     },
     {
-        field: "created_at",
+        accessorKey: "created_at",
         header: "Created at",
     },
 ];
@@ -67,11 +96,7 @@ const Index = ({ auth, jurusan }) => {
                     Add Data
                 </Link>
             </div>
-            <Datatable
-                data={jurusan.data}
-                column={columns}
-                actionTemplate={actionTemplate}
-            />
+            <Datatable columns={columns} data={jurusan.data} />
         </DashboardLayout>
     );
 };

@@ -12,8 +12,8 @@ const DashboardLayout = ({ auth, children }) => {
                 user={auth.user}
             />
             <div className="flex flex-1 flex-col">
-                <DashboardHeader setOpen={setOpenSidebar} />
-                <main className="flex-1 flex-col flex bg-muted/40 p-4 md:p-6">
+                <DashboardHeader setOpen={setOpenSidebar} auth={auth} />
+                <main className="flex-1 flex-col flex p-4 md:p-6">
                     {children}
                 </main>
             </div>

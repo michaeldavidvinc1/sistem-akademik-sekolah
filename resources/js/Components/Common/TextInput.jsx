@@ -1,6 +1,6 @@
-import { InputText } from "primereact/inputtext";
 import React from "react";
 import InputError from "./InputError";
+import { Input } from "../ui/input";
 
 const TextInput = ({
     name,
@@ -17,7 +17,7 @@ const TextInput = ({
             <label className="text-sm font-bold" htmlFor={name}>
                 {label}
             </label>
-            <InputText
+            <Input
                 id={id}
                 name={name}
                 type={type}

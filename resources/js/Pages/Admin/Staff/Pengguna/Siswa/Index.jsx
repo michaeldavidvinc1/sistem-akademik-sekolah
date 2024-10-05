@@ -1,39 +1,99 @@
 import DashboardLayout from "@/Components/Admin/Layout";
-import Datatable from "@/Components/Common/Datatable";
 import { Link, router } from "@inertiajs/react";
-import { SquarePen } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
 import React, { useState } from "react";
 import SelectInput from "@/Components/Common/SelectInput";
+import Datatable from "@/Components/Common/Datatable";
+import { Button } from "@/Components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 
 const columns = [
     {
-        field: "nama_lengkap",
-        header: "Nama",
-        sortable: true,
+        accessorKey: "no",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    No
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => row.index + 1,
     },
     {
-        field: "user.email",
+        accessorKey: "nama_lengkap",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    Nama Lengkap
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+    },
+    {
+        accessorKey: "user.email",
         header: "Email",
     },
     {
-        field: "alamat",
-        header: "Alamat",
-    },
-    {
-        field: "status",
+        accessorKey: "status",
         header: "Status",
     },
     {
-        field: "kelas.nama_kelas",
+        accessorKey: "kelas.nama_kelas",
         header: "Kelas",
     },
     {
-        field: "jurusan.nama_jurusan",
+        accessorKey: "jurusan.nama_jurusan",
         header: "Jurusan",
     },
     {
-        field: "tanggal_daftar",
-        header: "Tanggal Daftar",
+        accessorKey: "tanggal_daftar",
+        header: "Tanggal Lahir",
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem>
+                            <Link
+                                href={route("staff.siswa.edit", data.id)}
+                                className=" flex gap-2 items-center "
+                            >
+                                <SquarePen className="w-4" /> Edit
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        },
     },
 ];
 
@@ -49,25 +109,13 @@ const Index = ({ auth, siswa, kelas, jurusan, queryParams = null }) => {
         router.get(route("staff.siswa.index"), queryParams);
     };
 
-    const actionTemplate = (rowData) => {
-        return (
-            <div className="flex gap-3">
-                <Link
-                    href={route("staff.siswa.edit", rowData.id)}
-                    className="text-yellow-500 hover:text-yellow-600 flex gap-1 items-center "
-                >
-                    <SquarePen className="w-4" /> Edit
-                </Link>
-            </div>
-        );
-    };
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">
                 <h1 className="text-xl font-semibold">Siswa List</h1>
             </div>
-            <div className="w-1/3 mb-5">
-                <div className="flex justify-end gap-2">
+            <div className="mb-5">
+                {/* <div className="flex justify-end gap-2">
                     <SelectInput
                         name="jurusan_id"
                         value={queryParams?.jurusan_id}
@@ -88,13 +136,10 @@ const Index = ({ auth, siswa, kelas, jurusan, queryParams = null }) => {
                         optionLabel="nama_kelas"
                         optionValue="id"
                     />
-                </div>
+                    <Button label="Reset" size="small" />
+                </div> */}
             </div>
-            <Datatable
-                data={siswa.data}
-                column={columns}
-                actionTemplate={actionTemplate}
-            />
+            <Datatable columns={columns} data={siswa.data} />
         </DashboardLayout>
     );
 };

@@ -4,7 +4,6 @@ import {
     Settings2,
     UsersRound,
 } from "lucide-react";
-import { Sidebar } from "primereact/sidebar";
 import React, { useState } from "react";
 
 const MenuSiswa = [
@@ -83,23 +82,15 @@ const MenuGuru = [
     },
 ];
 
-// Fungsi untuk memeriksa apakah item aktif
 const isActiveMenuItem = (menuItem) => {
     if (menuItem.path && route().current() === menuItem.id) {
         return true;
     }
 
-    // Cek apakah anak-anak item memiliki route yang sama
-    if (menuItem.children) {
-        return menuItem.children.some(
-            (child) => route().current() === child.id
-        );
-    }
-
     return false;
 };
 
-function MenuItems({ setOpen, role }) {
+export function MenuItems({ setOpen, role }) {
     const [openMenu, setOpenMenu] = useState(null);
     const toggleMenu = (id) => {
         setOpenMenu(openMenu === id ? null : id);
@@ -113,18 +104,24 @@ function MenuItems({ setOpen, role }) {
             case "guru":
                 return MenuGuru;
             default:
-                return []; // Kembalikan array kosong jika role tidak dikenali
+                return [];
         }
     };
     return (
         <nav className="mt-8 flex-col flex gap-1">
             {getMenuByRole().map((menuItem) => {
+                const isActive =
+                    isActiveMenuItem(menuItem) ||
+                    (menuItem.children &&
+                        menuItem.children.some(
+                            (child) => route().current() === child.id
+                        )); // Memeriksa apakah menu item induk aktif atau salah satu anaknya aktif
                 return (
                     <div
                         key={menuItem.id}
                         className={`${
-                            isActiveMenuItem(menuItem)
-                                ? " rounded-lg bg-primary/30 border border-[#2500c3]/30 text-[#2500c3]/70"
+                            isActive
+                                ? " rounded-lg bg-primary/20 border text-primary/90 border-primary/30"
                                 : ""
                         }`}
                     >
@@ -134,14 +131,10 @@ function MenuItems({ setOpen, role }) {
                                     toggleMenu(menuItem.id);
                                 } else {
                                     window.location.href = menuItem.path;
-                                    setOpen ? setOpen(false) : null;
+                                    setOpen && setOpen(false); // Menggunakan && untuk memeriksa setOpen
                                 }
                             }}
-                            className={`${
-                                route().current() === menuItem.id
-                                    ? "bg-primary/30 border text-[#2500c3]/70"
-                                    : ""
-                            } flex cursor-pointer text-sm font-poppins items-center justify-between rounded-md font-semibold px-3 py-2 text-[#2500c3]/70 hover:bg-primary/30`}
+                            className="flex cursor-pointer text-sm font-poppins items-center justify-between rounded-md font-semibold px-3 py-2"
                         >
                             <div className="flex items-center gap-4">
                                 {menuItem.icon}
@@ -164,15 +157,9 @@ function MenuItems({ setOpen, role }) {
                                         key={item.id}
                                         onClick={() => {
                                             window.location.href = item.path;
-                                            setOpen ? setOpen(false) : null;
+                                            setOpen && setOpen(false);
                                         }}
-                                        className={`cursor-pointer text-sm font-poppins px-3 py-1 rounded-md text-[#2500c3] hover:text-[#2500c3]/70 ${
-                                            window.location.href.includes(
-                                                item.path
-                                            )
-                                                ? ""
-                                                : ""
-                                        }`}
+                                        className="cursor-pointer text-sm font-poppins px-3 py-1 rounded-md font-semibold"
                                     >
                                         {item.label}
                                     </div>
@@ -186,19 +173,9 @@ function MenuItems({ setOpen, role }) {
     );
 }
 
-const DashboardSidebar = ({ user, open, setOpen }) => {
+const DashboardSidebar = ({ user, setOpen }) => {
     return (
         <>
-            <Sidebar visible={open} onHide={() => setOpen(false)}>
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                        <h1 className="text-md font-extrabold font-poppins">
-                            Shopease
-                        </h1>
-                    </div>
-                </div>
-                <MenuItems setOpen={setOpen} role={user.role} />
-            </Sidebar>
             <aside className="hidden w-64 flex-col border-r bg-background py-6 px-4 lg:flex">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">

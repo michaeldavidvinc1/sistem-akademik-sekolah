@@ -1,6 +1,6 @@
 import React from "react";
 import InputError from "./InputError";
-import { Dropdown } from "primereact/dropdown";
+import { Select } from "../ui/select";
 
 const SelectInput = ({
     name,
@@ -8,28 +8,25 @@ const SelectInput = ({
     onChange,
     label,
     errorMessage,
-    options,
-    optionLabel,
-    optionValue,
+    children,
     ...props
 }) => {
     return (
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2">
             <label className="text-sm font-bold" htmlFor={name}>
                 {label}
             </label>
-            <Dropdown
+            <Select
                 name={name}
                 value={value}
-                onChange={onChange}
-                options={options}
-                optionLabel={optionLabel}
-                optionValue={optionValue}
+                onValueChange={onChange}
                 className={`text-sm ${
                     errorMessage ? "border-red-500" : "border-primary/60"
                 }`}
                 {...props}
-            />
+            >
+                {children}
+            </Select>
             <InputError message={errorMessage} className="mt-2" />
             {/* <small id="username-help">
                 Enter your username to reset your password.

@@ -1,7 +1,7 @@
 import React from "react";
 import InputError from "./InputError";
-import { Dropdown } from "primereact/dropdown";
-import { RadioButton } from "primereact/radiobutton";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 const RadioInput = ({
     label,
@@ -18,27 +18,27 @@ const RadioInput = ({
             <label className="text-sm font-bold" htmlFor={name}>
                 {label}
             </label>
-            <div className="flex gap-5 items-center">
-                {category.map((category) => {
+            <RadioGroup className="flex items-center gap-5">
+                {category.map((category, index) => {
                     return (
                         <div
-                            key={category.key}
-                            className="flex gap-1 items-center"
+                            className="flex items-center space-x-2"
+                            key={index}
                         >
-                            <RadioButton
+                            <RadioGroupItem
                                 inputId={category.key}
                                 name={name}
                                 value={category.key}
                                 onChange={onChange}
                                 checked={value === category.key}
                             />
-                            <label htmlFor={category.key} className="ml-2">
+                            <Label htmlFor={category.key}>
                                 {category.name}
-                            </label>
+                            </Label>
                         </div>
                     );
                 })}
-            </div>
+            </RadioGroup>
             <InputError message={errorMessage} className="mt-2" />
         </div>
     );

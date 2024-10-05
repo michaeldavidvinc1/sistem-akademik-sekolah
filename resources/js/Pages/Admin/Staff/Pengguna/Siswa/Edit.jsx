@@ -3,13 +3,19 @@ import RadioInput from "@/Components/Common/RadioInput";
 import SelectInput from "@/Components/Common/SelectInput";
 import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
+import { Button } from "@/Components/ui/button";
+import {
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { Link, useForm } from "@inertiajs/react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { useRef } from "react";
 
 const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
-    const toast = useRef(null);
+    const { toast } = useToast();
     const { data, setData, put, processing, errors, reset } = useForm({
         email: siswa.data.user.email,
         nama_lengkap: siswa.data.nama_lengkap,
@@ -29,11 +35,10 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
         put(route("staff.siswa.update", siswa.data.id), {
             onError: (errors) => {
                 if (errors.name) {
-                    toast.current.show({
-                        severity: "error",
-                        summary: "Error",
-                        detail: errors.name,
-                        life: 3000,
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: errors.message,
                     });
                 }
             },
@@ -52,7 +57,6 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
 
     return (
         <DashboardLayout auth={auth}>
-            <Toast ref={toast} />
             <h1 className="text-xl font-semibold">Edit Kelas Page</h1>
             <form onSubmit={submit} className="mt-5">
                 <div className="grid grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-4">
@@ -135,10 +139,25 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                         onChange={(e) => setData("kelas_id", e.value)}
                         label="Kelas"
                         errorMessage={errors.kelas_id}
-                        options={kelas.data}
-                        optionLabel="nama_kelas"
-                        optionValue="id"
-                    />
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Pilih kelas" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {kelas.data.map((item, index) => {
+                                    return (
+                                        <SelectItem
+                                            key={index}
+                                            value={item.iid}
+                                        >
+                                            {item.nama_kelas}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectInput>
                     <RadioInput
                         category={jk}
                         errorMessage={errors.kelas_id}
@@ -165,13 +184,10 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                     />
                 </div>
                 <div className="flex justify-end items-center mt-3 gap-3">
-                    <Link
-                        className="px-3 py-3 hover:bg-gray-100 rounded-lg font-bold border border-gray-100"
-                        href={route("staff.siswa.index")}
-                    >
-                        Cancel
-                    </Link>
-                    <Button type="submit" label="Update" size="small" />
+                    <Button variant="ghost">
+                        <Link href={route("staff.siswa.index")}>Cancel</Link>
+                    </Button>
+                    <Button type="submit">Update</Button>
                 </div>
             </form>
         </DashboardLayout>

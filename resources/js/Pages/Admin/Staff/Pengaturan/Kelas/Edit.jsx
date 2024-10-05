@@ -1,10 +1,7 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import SelectInput from "@/Components/Common/SelectInput";
-import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
 import { Link, useForm } from "@inertiajs/react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { useRef } from "react";
 
 const EditKelas = ({ auth, tahunAjaran, jurusan, kelas }) => {
