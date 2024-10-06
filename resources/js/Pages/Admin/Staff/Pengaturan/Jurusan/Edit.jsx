@@ -1,14 +1,12 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
+import { Button } from "@/Components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Link, useForm } from "@inertiajs/react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { useRef } from "react";
 
 const EditJurusan = ({ auth, jurusan }) => {
-    console.log(jurusan);
-    const toast = useRef(null);
+    const { toast } = useToast();
     const { data, setData, put, processing, errors, reset } = useForm({
         kode_jurusan: jurusan.data.kode_jurusan,
         nama_jurusan: jurusan.data.nama_jurusan,
@@ -21,11 +19,10 @@ const EditJurusan = ({ auth, jurusan }) => {
         put(route("staff.jurusan.update", jurusan.data.id), {
             onError: (errors) => {
                 if (errors.name) {
-                    toast.current.show({
-                        severity: "error",
-                        summary: "Error",
-                        detail: errors.name,
-                        life: 3000,
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: errors.message,
                     });
                 }
             },
@@ -34,7 +31,6 @@ const EditJurusan = ({ auth, jurusan }) => {
 
     return (
         <DashboardLayout auth={auth}>
-            <Toast ref={toast} />
             <h1 className="text-xl font-semibold">Edit Jurusan Page</h1>
             <form onSubmit={submit} className="mt-5">
                 <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -76,7 +72,7 @@ const EditJurusan = ({ auth, jurusan }) => {
                     >
                         Cancel
                     </Link>
-                    <Button type="submit" label="Update" size="small" />
+                    <Button type="submit">Update</Button>
                 </div>
             </form>
         </DashboardLayout>

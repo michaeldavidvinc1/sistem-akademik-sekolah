@@ -1,14 +1,20 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import SelectInput from "@/Components/Common/SelectInput";
-import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
+import { Button } from "@/Components/ui/button";
+import {
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { Link, useForm } from "@inertiajs/react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { useRef } from "react";
 
 const CreateKelas = ({ auth, tahunAjaran, jurusan }) => {
-    const toast = useRef(null);
+    const { toast } = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         nama_kelas: "",
         kapasitas: "",
@@ -22,11 +28,10 @@ const CreateKelas = ({ auth, tahunAjaran, jurusan }) => {
         post(route("staff.kelas.store"), {
             onError: (errors) => {
                 if (errors.name) {
-                    toast.current.show({
-                        severity: "error",
-                        summary: "Error",
-                        detail: errors.name,
-                        life: 3000,
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: errors.message,
                     });
                 }
             },
@@ -35,7 +40,6 @@ const CreateKelas = ({ auth, tahunAjaran, jurusan }) => {
 
     return (
         <DashboardLayout auth={auth}>
-            <Toast ref={toast} />
             <h1 className="text-xl font-semibold">Add Kelas Page</h1>
             <form onSubmit={submit} className="mt-5">
                 <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -60,32 +64,62 @@ const CreateKelas = ({ auth, tahunAjaran, jurusan }) => {
                     <SelectInput
                         name="tahun_ajaran_id"
                         value={data.tahun_ajaran_id}
-                        onChange={(e) => setData("tahun_ajaran_id", e.value)}
+                        onChange={(value) => setData("tahun_ajaran_id", value)}
                         label="Tahun Ajaran"
                         errorMessage={errors.tahun_ajaran_id}
-                        options={tahunAjaran.data}
-                        optionLabel="tahun_ajaran"
-                        optionValue="id"
-                    />
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Pilih tahun ajaran" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {tahunAjaran.data.map((item) => {
+                                    return (
+                                        <SelectItem
+                                            key={item.id}
+                                            value={item.id.toString()}
+                                        >
+                                            {item.tahun_ajaran}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectInput>
                     <SelectInput
                         name="jurusan_id"
                         value={data.jurusan_id}
-                        onChange={(e) => setData("jurusan_id", e.value)}
+                        onChange={(value) => setData("jurusan_id", value)}
                         label="Jurusan"
                         errorMessage={errors.jurusan_id}
-                        options={jurusan.data}
-                        optionLabel="nama_jurusan"
-                        optionValue="id"
-                    />
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Pilih jurusan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {jurusan.data.map((item) => {
+                                    return (
+                                        <SelectItem
+                                            key={item.id}
+                                            value={item.id.toString()}
+                                        >
+                                            {item.nama_jurusan}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectInput>
                 </div>
                 <div className="flex justify-end items-center mt-3 gap-3">
                     <Link
                         className="px-3 py-3 hover:bg-gray-100 rounded-lg font-bold border border-gray-100"
-                        href={route("staff.tahun-ajaran.index")}
+                        href={route("staff.kelas.index")}
                     >
                         Cancel
                     </Link>
-                    <Button type="submit" label="Save" size="small" />
+                    <Button type="submit">Save</Button>
                 </div>
             </form>
         </DashboardLayout>

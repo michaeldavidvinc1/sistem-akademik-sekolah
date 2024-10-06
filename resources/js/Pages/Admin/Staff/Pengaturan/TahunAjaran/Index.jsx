@@ -1,8 +1,15 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import Datatable from "@/Components/Common/Datatable";
 import { Button } from "@/Components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 import { Link, router } from "@inertiajs/react";
-import { ArrowUpDown, SquarePen, Trash2 } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
 import Swal from "sweetalert2";
 
@@ -52,42 +59,59 @@ const columns = [
         accessorKey: "created_at",
         header: "Created At",
     },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const data = row.original;
+            const handleDelete = (id) => {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You cannot undo this data again!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Iya, Hapus",
+                    cancelButtonText: "Batal",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        router.delete(route("staff.tahun-ajaran.destroy", id));
+                    }
+                });
+            };
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem>
+                            <Link
+                                href={route("staff.tahun-ajaran.edit", data.id)}
+                                className=" flex gap-2 items-center "
+                            >
+                                <SquarePen className="w-4" /> Edit
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <span
+                                className=" flex gap-2 items-center cursor-pointer"
+                                onClick={() => handleDelete(data.id)}
+                            >
+                                <Trash2 className="w-4" /> Delete
+                            </span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        },
+    },
 ];
 const Index = ({ auth, tahunAjaran }) => {
-    const handleDelete = (id) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You cannot undo this data again!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Iya, Hapus",
-            cancelButtonText: "Batal",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                router.delete(route("staff.tahun-ajaran.destroy", id));
-            }
-        });
-    };
-    const actionTemplate = (rowData) => {
-        return (
-            <div className="flex gap-3">
-                <Link
-                    href={route("staff.tahun-ajaran.edit", rowData.id)}
-                    className="text-yellow-500 hover:text-yellow-600 "
-                >
-                    <SquarePen className="w-4" />
-                </Link>
-                <button
-                    className="text-red-500 hover:text-red-600"
-                    onClick={() => handleDelete(rowData.id)}
-                >
-                    <Trash2 className="w-4" />
-                </button>
-            </div>
-        );
-    };
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">

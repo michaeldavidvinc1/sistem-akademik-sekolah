@@ -26,7 +26,6 @@ const RadioInput = ({
                             key={index}
                         >
                             <RadioGroupItem
-                                inputId={category.key}
                                 name={name}
                                 value={category.key}
                                 onChange={onChange}

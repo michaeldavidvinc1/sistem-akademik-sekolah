@@ -5,6 +5,7 @@ import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
 import { Button } from "@/Components/ui/button";
 import {
+    Select,
     SelectContent,
     SelectGroup,
     SelectItem,
@@ -26,10 +27,9 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
         tanggal_daftar: siswa.data.tanggal_daftar,
         status: siswa.data.status,
         jenis_kelamin: siswa.data.jenis_kelamin,
-        jurusan_id: siswa.data?.jurusan?.id,
-        kelas_id: siswa.data.kelas.id,
+        jurusan_id: siswa.data?.jurusan?.id.toString(),
+        kelas_id: siswa.data.kelas.id.toString(),
     });
-
     const submit = (e) => {
         e.preventDefault();
         put(route("staff.siswa.update", siswa.data.id), {
@@ -54,7 +54,6 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
         { name: "Active", key: 1 },
         { name: "Inactive", key: 0 },
     ];
-
     return (
         <DashboardLayout auth={auth}>
             <h1 className="text-xl font-semibold">Edit Kelas Page</h1>
@@ -126,17 +125,32 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                     <SelectInput
                         name="jurusan_id"
                         value={data.jurusan_id}
-                        onChange={(e) => setData("jurusan_id", e.value)}
+                        onChange={(value) => setData("jurusan_id", value)}
                         label="Jurusan"
                         errorMessage={errors.jurusan_id}
-                        options={jurusan.data}
-                        optionLabel="nama_jurusan"
-                        optionValue="id"
-                    />
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Pilih jurusan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {jurusan.data.map((item) => {
+                                    return (
+                                        <SelectItem
+                                            key={item.id}
+                                            value={item.id.toString()}
+                                        >
+                                            {item.nama_jurusan}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectInput>
                     <SelectInput
                         name="kelas_id"
                         value={data.kelas_id}
-                        onChange={(e) => setData("kelas_id", e.value)}
+                        onChange={(value) => setData("kelas_id", value)}
                         label="Kelas"
                         errorMessage={errors.kelas_id}
                     >
@@ -145,11 +159,11 @@ const EditSiswa = ({ auth, siswa, jurusan, kelas }) => {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {kelas.data.map((item, index) => {
+                                {kelas.data.map((item) => {
                                     return (
                                         <SelectItem
-                                            key={index}
-                                            value={item.iid}
+                                            key={item.id}
+                                            value={item.id.toString()}
                                         >
                                             {item.nama_kelas}
                                         </SelectItem>

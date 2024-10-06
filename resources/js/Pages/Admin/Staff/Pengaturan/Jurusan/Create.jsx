@@ -1,13 +1,12 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import TextArea from "@/Components/Common/Textarea";
 import TextInput from "@/Components/Common/TextInput";
+import { Button } from "@/Components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Link, useForm } from "@inertiajs/react";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { useRef } from "react";
 
 const CreateJurusan = ({ auth }) => {
-    const toast = useRef(null);
+    const { toast } = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         kode_jurusan: "",
         nama_jurusan: "",
@@ -20,11 +19,10 @@ const CreateJurusan = ({ auth }) => {
         post(route("staff.jurusan.store"), {
             onError: (errors) => {
                 if (errors.name) {
-                    toast.current.show({
-                        severity: "error",
-                        summary: "Error",
-                        detail: errors.name,
-                        life: 3000,
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: errors.message,
                     });
                 }
             },
@@ -33,7 +31,6 @@ const CreateJurusan = ({ auth }) => {
 
     return (
         <DashboardLayout auth={auth}>
-            <Toast ref={toast} />
             <h1 className="text-xl font-semibold">Add Jurusan Page</h1>
             <form onSubmit={submit} className="mt-5">
                 <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -75,7 +72,7 @@ const CreateJurusan = ({ auth }) => {
                     >
                         Cancel
                     </Link>
-                    <Button type="submit" label="Save" size="small" />
+                    <Button type="submit">Save</Button>
                 </div>
             </form>
         </DashboardLayout>
