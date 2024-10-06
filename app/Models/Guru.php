@@ -16,7 +16,17 @@ class Guru extends Model
         'bidang_studi',
         'alamat',
         'telepon',
-        'join_date',
+        'tanggal_join',
         'status',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function jurusan(){
+        return $this->belongsTo(Jurusan::class);
+    }
+
+
 }

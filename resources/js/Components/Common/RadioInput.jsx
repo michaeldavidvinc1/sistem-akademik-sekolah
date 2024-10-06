@@ -9,7 +9,6 @@ const RadioInput = ({
     category,
     name,
     onChange,
-    checked,
     value,
     ...props
 }) => {

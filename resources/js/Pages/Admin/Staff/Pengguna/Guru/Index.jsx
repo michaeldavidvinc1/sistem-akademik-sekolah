@@ -1,6 +1,6 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import { Link, router } from "@inertiajs/react";
-import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import SelectInput from "@/Components/Common/SelectInput";
 import Datatable from "@/Components/Common/Datatable";
@@ -13,13 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
-import {
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
+import Swal from "sweetalert2";
 
 const columns = [
     {
@@ -64,21 +58,33 @@ const columns = [
         header: "Status",
     },
     {
-        accessorKey: "kelas.nama_kelas",
-        header: "Kelas",
-    },
-    {
         accessorKey: "jurusan.nama_jurusan",
         header: "Jurusan",
     },
     {
-        accessorKey: "tanggal_daftar",
-        header: "Tanggal Lahir",
+        accessorKey: "tanggal_join",
+        header: "Tanggal Join",
     },
     {
         id: "actions",
         cell: ({ row }) => {
             const data = row.original;
+            const handleDelete = (id) => {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You cannot undo this data again!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Iya, Hapus",
+                    cancelButtonText: "Batal",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        router.delete(route("staff.guru.destroy", id));
+                    }
+                });
+            };
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -91,11 +97,19 @@ const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={route("staff.siswa.edit", data.id)}
+                                href={route("staff.guru.edit", data.id)}
                                 className=" flex gap-2 items-center "
                             >
                                 <SquarePen className="w-4" /> Edit
                             </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <span
+                                className=" flex gap-2 items-center cursor-pointer"
+                                onClick={() => handleDelete(data.id)}
+                            >
+                                <Trash2 className="w-4" /> Delete
+                            </span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -104,7 +118,7 @@ const columns = [
     },
 ];
 
-const Index = ({ auth, siswa, kelas, jurusan, queryParams = null }) => {
+const Index = ({ auth, guru, jurusan, queryParams = null }) => {
     queryParams = queryParams || {};
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -116,73 +130,43 @@ const Index = ({ auth, siswa, kelas, jurusan, queryParams = null }) => {
         router.get(route("staff.siswa.index"), queryParams);
     };
 
-    const handleReset = () => {
-        router.get(route("staff.siswa.index"));
-    };
-
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">
-                <h1 className="text-xl font-semibold">Siswa List</h1>
+                <h1 className="text-xl font-semibold">Guru List</h1>
+                <Link
+                    className="bg-primary text-white text-sm px-3 py-2 font-semibold rounded-lg hover:bg-primary/90"
+                    href={route("staff.guru.create")}
+                >
+                    Add Data
+                </Link>
             </div>
             <div className="mb-5">
-                <div className="flex justify-end gap-2 items-center">
+                {/* <div className="flex justify-end gap-2">
                     <SelectInput
                         name="jurusan_id"
                         value={queryParams?.jurusan_id}
-                        onChange={(value) =>
-                            searchFieldChanged("jurusan_id", value)
+                        onChange={(e) =>
+                            searchFieldChanged("jurusan_id", e.target.value)
                         }
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Pilih jurusan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {jurusan.data.map((item) => {
-                                    return (
-                                        <SelectItem
-                                            key={item.id}
-                                            value={item.id.toString()}
-                                        >
-                                            {item.nama_jurusan}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectGroup>
-                        </SelectContent>
-                    </SelectInput>
+                        options={jurusan.data}
+                        optionLabel="nama_jurusan"
+                        optionValue="id"
+                    />
                     <SelectInput
                         name="kelas_id"
                         value={queryParams?.kelas_id}
-                        onChange={(value) =>
-                            searchFieldChanged("kelas_id", value)
+                        onChange={(e) =>
+                            searchFieldChanged("kelas_id", e.target.value)
                         }
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Filter kelas" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {kelas.data.map((item) => {
-                                    return (
-                                        <SelectItem
-                                            key={item.id}
-                                            value={item.id.toString()}
-                                        >
-                                            {item.nama_kelas}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectGroup>
-                        </SelectContent>
-                    </SelectInput>
-                    <Button variant="ghost" onClick={handleReset}>
-                        Reset
-                    </Button>
-                </div>
+                        options={kelas.data}
+                        optionLabel="nama_kelas"
+                        optionValue="id"
+                    />
+                    <Button label="Reset" size="small" />
+                </div> */}
             </div>
-            <Datatable columns={columns} data={siswa.data} />
+            <Datatable columns={columns} data={guru.data} />
         </DashboardLayout>
     );
 };
