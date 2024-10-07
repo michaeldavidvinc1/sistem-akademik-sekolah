@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
 use App\Http\Controllers\Staff\JurusanController;
 use App\Http\Controllers\Staff\KelasController;
@@ -33,6 +34,7 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.guru.update',
         'destroy' => 'staff.guru.destroy',
     ]);
+    Route::get("/guru/change-password/{id}", [GuruController::class, 'change_password'])->name('guru.change.password.page');
     Route::resource('/siswa-list', SiswaController::class)->names([
         'index' => 'staff.siswa.index',
         'create' => 'staff.siswa.create',
@@ -87,4 +89,5 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.tahun-ajaran.update',
         'destroy' => 'staff.tahun-ajaran.destroy',
     ]);
+    
 });

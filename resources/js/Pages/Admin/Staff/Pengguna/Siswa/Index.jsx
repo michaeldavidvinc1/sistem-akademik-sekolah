@@ -60,10 +60,6 @@ const columns = [
         header: "Email",
     },
     {
-        accessorKey: "status",
-        header: "Status",
-    },
-    {
         accessorKey: "kelas.nama_kelas",
         header: "Kelas",
     },

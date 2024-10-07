@@ -15,4 +15,8 @@ class Staff extends Model
         'tanggal_join',
         'status',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

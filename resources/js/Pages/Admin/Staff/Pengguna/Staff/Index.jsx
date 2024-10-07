@@ -10,6 +10,7 @@ import {
     Trash2,
 } from "lucide-react";
 import React, { useState } from "react";
+import SelectInput from "@/Components/Common/SelectInput";
 import Datatable from "@/Components/Common/Datatable";
 import { Button } from "@/Components/ui/button";
 import {
@@ -21,27 +22,7 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import Swal from "sweetalert2";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
-import { Input } from "@/Components/ui/input";
 import { Badge } from "@/Components/ui/badge";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/Components/ui/dialog";
-import { Label } from "@/Components/ui/label";
 
 const columns = [
     {
@@ -94,10 +75,6 @@ const columns = [
         },
     },
     {
-        accessorKey: "jurusan.nama_jurusan",
-        header: "Jurusan",
-    },
-    {
         accessorKey: "tanggal_join",
         header: "Tanggal Join",
     },
@@ -117,7 +94,7 @@ const columns = [
                     cancelButtonText: "Batal",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        router.delete(route("staff.guru.destroy", id));
+                        router.delete(route("staff.staff.destroy", id));
                     }
                 });
             };
@@ -132,17 +109,12 @@ const columns = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <span className=" flex gap-2 items-center cursor-pointer">
-                                        <FileLock2 className="w-4" /> Change
-                                        Password
-                                    </span>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-md">
-                                    <h1>asdaasdad</h1>
-                                </DialogContent>
-                            </Dialog>
+                            <Link
+                                href={route("staff.guru.edit", data.id)}
+                                className=" flex gap-2 items-center "
+                            >
+                                <FileLock2 className="w-4" /> Change Password
+                            </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Link
@@ -167,7 +139,7 @@ const columns = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <Link
-                                href={route("staff.guru.edit", data.id)}
+                                href={route("staff.staff.edit", data.id)}
                                 className=" flex gap-2 items-center "
                             >
                                 <SquarePen className="w-4" /> Edit
@@ -188,101 +160,19 @@ const columns = [
     },
 ];
 
-const Index = ({ auth, guru, jurusan, queryParams = null }) => {
-    queryParams = queryParams || {};
-    const searchFieldChanged = (name, value) => {
-        if (value) {
-            queryParams[name] = value;
-        } else {
-            delete queryParams[name];
-        }
-
-        router.get(route("staff.guru.index"), queryParams);
-    };
-
-    const handleReset = () => {
-        router.get(route("staff.guru.index"));
-    };
-
+const Index = ({ auth, staff }) => {
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">
-                <h1 className="text-xl font-semibold">Guru List</h1>
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <span className=" flex gap-2 items-center cursor-pointer">
-                            <FileLock2 className="w-4" /> Change Password
-                        </span>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                        <h1>asdaasdad</h1>
-                    </DialogContent>
-                </Dialog>
+                <h1 className="text-xl font-semibold">Staff List</h1>
                 <Link
                     className="bg-primary text-white text-sm px-3 py-2 font-semibold rounded-lg hover:bg-primary/90"
-                    href={route("staff.guru.create")}
+                    href={route("staff.staff.create")}
                 >
                     Add Data
                 </Link>
             </div>
-            <div className="mb-5">
-                <div className="flex justify-end gap-2 items-center">
-                    <Select
-                        name="jurusan_id"
-                        value={queryParams?.jurusan_id}
-                        onChange={(value) =>
-                            searchFieldChanged("jurusan_id", value)
-                        }
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Pilih jurusan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {jurusan.data.map((item) => {
-                                    return (
-                                        <SelectItem
-                                            key={item.id}
-                                            value={item.id.toString()}
-                                        >
-                                            {item.nama_jurusan}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        name="status"
-                        value={queryParams?.status}
-                        onChange={(value) =>
-                            searchFieldChanged("status", value)
-                        }
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Pilih status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="1">Active</SelectItem>
-                                <SelectItem value="0">Inactive</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <Input
-                        type="date"
-                        className="w-[200px]"
-                        value={queryParams?.joinDate}
-                        onChange={(e) =>
-                            searchFieldChanged("joinDate", e.target.value)
-                        }
-                    />
-                    <Button variant="ghost" onClick={handleReset}>
-                        Reset
-                    </Button>
-                </div>
-            </div>
-            <Datatable columns={columns} data={guru.data} />
+            <Datatable columns={columns} data={staff.data} />
         </DashboardLayout>
     );
 };

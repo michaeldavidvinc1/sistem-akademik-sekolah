@@ -23,7 +23,7 @@ const EditGuru = ({ auth, jurusan, guru }) => {
         bidang_studi: guru.data.bidang_studi,
         alamat: guru.data.alamat,
         telepon: guru.data.telepon,
-        jurusan_id: guru.data.jurusan.id.toString(),
+        jurusan_id: guru.data?.jurusan?.id.toString(),
     });
     const submit = (e) => {
         e.preventDefault();

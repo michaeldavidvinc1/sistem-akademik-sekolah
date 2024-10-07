@@ -16,11 +16,21 @@ class GuruController extends Controller
 {
     public function index(){
         $jurusanId = request('jurusan_id');
+        $status = request('status');
+        $joinDate = request('joinDate');
 
         $query = Guru::with(['user', 'jurusan']);
 
         if ($jurusanId) {
             $query->where('jurusan_id', $jurusanId);
+        }
+
+        if ($joinDate) {
+            $query->where('tanggal_join', $joinDate);
+        }
+
+        if ($status !== null) {
+            $query->where('status', $status);
         }
 
         $data = $query->get();
@@ -109,5 +119,12 @@ class GuruController extends Controller
     public function destroy($id){
         $guru = Guru::findOrFail($id);
         $guru->delete();
+    }
+
+    public function change_password($id, Request $request){
+        $guru = Guru::findOrFail($id);
+        return Inertia::render('Admin/Staff/Pengguna/Guru/ChangePassword', [
+            'guru' => new GuruResource($guru)
+        ]);
     }
 }

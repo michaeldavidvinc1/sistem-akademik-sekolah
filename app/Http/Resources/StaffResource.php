@@ -17,6 +17,7 @@ class StaffResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user' => new UserResource($this->whenLoaded('user')),
             'nama_lengkap' => $this->nama_lengkap,
             'tanggal_join' => $this->tanggal_join,
             'status' => $this->status,

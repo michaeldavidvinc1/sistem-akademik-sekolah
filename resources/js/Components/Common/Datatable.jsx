@@ -57,24 +57,33 @@ const Datatable = ({ data, columns }) => {
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
-                                    className="text-center"
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
+                            table.getRowModel().rows.map((row) => {
+                                const status = row.original.status;
+                                return (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={
+                                            row.getIsSelected() && "selected"
+                                        }
+                                        className={`text-center ${
+                                            typeof status !== "undefined"
+                                                ? status === 0
+                                                    ? "bg-red-100"
+                                                    : ""
+                                                : ""
+                                        }`}
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                );
+                            })
                         ) : (
                             <TableRow>
                                 <TableCell
