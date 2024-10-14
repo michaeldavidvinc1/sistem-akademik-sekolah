@@ -34,4 +34,8 @@ class Siswa extends Model
     public function kelas(){
         return $this->belongsTo(Kelas::class);
     }
+
+    public function pendaftaran(){
+        return $this->hasOne(Pendaftaran::class);
+    }
 }

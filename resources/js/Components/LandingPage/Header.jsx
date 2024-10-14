@@ -34,6 +34,14 @@ const HeaderLandingPage = () => {
                             Fasilitas
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            href={route("pendaftaran")}
+                            className="inline-block text-gray-600 text-sm xl:text-base py-1 px-2 xl:px-3 hover:text-primary transition-all duration-300 font-semibold"
+                        >
+                            Pendaftaran Siswa
+                        </Link>
+                    </li>
                 </ul>
             </div>
 

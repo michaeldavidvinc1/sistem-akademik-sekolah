@@ -16,11 +16,11 @@ return new class extends Migration
     {
         Schema::create('pendaftarans', function (Blueprint $table) {
             $table->id();
+            $table->string('email');
             $table->foreignIdFor(Siswa::class, 'siswa_id');
-            $table->foreignIdFor(TahunAjaran::class, 'tahun_ajaran_id');
             $table->foreignIdFor(Jurusan::class, 'jurusan_id');
             $table->date('tanggal_pendaftaran');
-            $table->boolean('status');
+            $table->enum('status', array('approved', 'decline', 'waiting'))->default('waiting');
             $table->timestamps();
         });
     }

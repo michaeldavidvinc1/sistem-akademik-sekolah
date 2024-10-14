@@ -13,7 +13,26 @@ use Inertia\Inertia;
 class StaffController extends Controller
 {
     public function index(){
-        $data = Staff::with("user")->get();
+        $status = request('status');
+        $joinDate = request('joinDate');
+        $namaLengkap = request('namaLengkap');
+
+        $query = Staff::with(['user']);
+
+        if ($namaLengkap) {
+            $query->where('nama_lengkap', 'LIKE', '%' . $namaLengkap . '%');
+        }
+
+        if ($joinDate) {
+            $query->where('tanggal_join', $joinDate);
+        }
+
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        $data = $query->get();
+
         return Inertia::render('Admin/Staff/Pengguna/Staff/Index', [
             'staff' => StaffResource::collection($data),
         ]);
@@ -75,5 +94,26 @@ class StaffController extends Controller
     public function destroy($id){
         $staff = Staff::findOrFail($id);
         $staff->delete();
+    }
+
+    public function change_status($id){
+        $data = Staff::findOrFail($id);
+
+        $data->status = !$data->status;
+        $data->save();
+
+    }
+
+    public function change_password(Request $request, $id){
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ]);
+        $guru = Staff::findOrFail($id);
+        $user = User::findOrFail($guru->user_id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return to_route('staff.guru.index');
     }
 }

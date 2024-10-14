@@ -1,7 +1,10 @@
 import {
     ChevronDown,
+    GraduationCap,
+    HandCoins,
     LayoutDashboard,
     Settings2,
+    UserPlus,
     UsersRound,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -21,6 +24,33 @@ const MenuStaff = [
         label: "Dashboard Staff",
         path: route("dashboard.page"),
         icon: <LayoutDashboard className="w-5" />,
+    },
+    {
+        id: "akademik",
+        label: "Akademik",
+        icon: <GraduationCap className="w-5" />,
+        children: [
+            {
+                id: "staff.jurusan.index",
+                label: "Jurusan",
+                path: route("staff.jurusan.index"),
+            },
+            {
+                id: "staff.kelas.index",
+                label: "Kelas",
+                path: route("staff.kelas.index"),
+            },
+            {
+                id: "staff.mapel.index",
+                label: "Mata Pelajaran",
+                path: route("staff.mapel.index"),
+            },
+            {
+                id: "staff.mapel.index",
+                label: "Penugasan Guru",
+                path: route("staff.mapel.index"),
+            },
+        ],
     },
     {
         id: "pengguna",
@@ -45,6 +75,23 @@ const MenuStaff = [
         ],
     },
     {
+        id: "manajemen-siswa",
+        label: "Manajemen Siswa",
+        icon: <UserPlus className="w-5" />,
+        children: [
+            {
+                id: "staff.pendaftaran.list",
+                label: "Pendaftaran Siswa",
+                path: route("staff.pendaftaran.list"),
+            },
+            {
+                id: "dashboard.page",
+                label: "Pembayaran SPP",
+                path: route("dashboard.page"),
+            },
+        ],
+    },
+    {
         id: "pengaturan",
         label: "Pengaturan",
         icon: <Settings2 className="w-5" />,
@@ -55,19 +102,9 @@ const MenuStaff = [
                 path: route("staff.tahun-ajaran.index"),
             },
             {
-                id: "staff.jurusan.index",
-                label: "Jurusan",
-                path: route("staff.jurusan.index"),
-            },
-            {
-                id: "staff.kelas.index",
-                label: "Kelas",
-                path: route("staff.kelas.index"),
-            },
-            {
-                id: "staff.mapel.index",
-                label: "Mata Pelajaran",
-                path: route("staff.mapel.index"),
+                id: "staff.tahun-ajaran.index",
+                label: "Informasi Sekolah",
+                path: route("staff.tahun-ajaran.index"),
             },
         ],
     },

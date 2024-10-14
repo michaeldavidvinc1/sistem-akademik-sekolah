@@ -14,4 +14,8 @@ class MataPelajaran extends Model
         'nama_mata_pelajaran',
         'jurusan_id',
     ];
+
+    public function jurusan(){
+        return $this->belongsTo(Jurusan::class);
+    }
 }

@@ -26,4 +26,12 @@ class Jurusan extends Model
     public function kelas(){
         return $this->hasMany(Kelas::class);
     }
+    
+    public function mataPelajaran(){
+        return $this->hasMany(MataPelajaran::class);
+    }
+
+    public function pendaftaran(){
+        return $this->hasMany(Pendaftaran::class);
+    }
 }

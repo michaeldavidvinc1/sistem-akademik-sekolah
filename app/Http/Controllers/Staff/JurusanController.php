@@ -12,13 +12,13 @@ class JurusanController extends Controller
 {
     public function index(){
         $data = Jurusan::all();
-        return Inertia::render('Admin/Staff/Pengaturan/Jurusan/Index', [
+        return Inertia::render('Admin/Staff/Akademik/Jurusan/Index', [
             'jurusan' => JurusanResource::collection($data)
         ]);
     }
 
     public function create(){
-        return Inertia::render('Admin/Staff/Pengaturan/Jurusan/Create');
+        return Inertia::render('Admin/Staff/Akademik/Jurusan/Create');
     }
 
     public function store(Request $request){
@@ -39,7 +39,7 @@ class JurusanController extends Controller
 
     public function edit(Jurusan $jurusan, $id){
         $data = Jurusan::findOrFail($id);
-        return Inertia::render('Admin/Staff/Pengaturan/Jurusan/Edit', [
+        return Inertia::render('Admin/Staff/Akademik/Jurusan/Edit', [
             'jurusan' => new JurusanResource($data)
         ]);
     }

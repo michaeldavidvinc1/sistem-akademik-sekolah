@@ -18,11 +18,16 @@ class SiswaController extends Controller
     public function index(){
         $kelasId = request('kelas_id');
         $jurusanId = request('jurusan_id');
+        $namaLengkap = request('namaLengkap');
 
         $query = Siswa::with(['user', 'kelas', 'jurusan']);
 
         if ($kelasId) {
             $query->where('kelas_id', $kelasId);
+        }
+
+        if ($namaLengkap) {
+            $query->where('nama_lengkap', 'LIKE', '%' . $namaLengkap . '%');
         }
 
         if ($jurusanId) {
@@ -88,7 +93,18 @@ class SiswaController extends Controller
         $siswa->save();
 
         return to_route('staff.siswa.index');
+    }
 
+    public function change_password(Request $request, $id){
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ]);
+        $guru = Siswa::findOrFail($id);
+        $user = User::findOrFail($guru->user_id);
+        $user->password = bcrypt($request->password);
+        $user->save();
 
+        return to_route('staff.siswa.index');
     }
 }

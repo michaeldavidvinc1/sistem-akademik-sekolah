@@ -18,4 +18,8 @@ class TahunAjaran extends Model
     public function kelas(){
         return $this->hasOne(Kelas::class);
     }
+
+    public function pendaftaran(){
+        return $this->hasMany(Pendaftaran::class);
+    }
 }

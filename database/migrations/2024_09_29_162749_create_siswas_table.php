@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignIdFor(User::class, 'user_id')->nullable();
             $table->string('nama_lengkap');
             $table->date('tanggal_lahir');
             $table->string('tempat_lahir');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('status');
             $table->string('jenis_kelamin');
             $table->foreignIdFor(Jurusan::class, 'jurusan_id');
-            $table->foreignIdFor(Kelas::class, 'kelas_id');
+            $table->foreignIdFor(Kelas::class, 'kelas_id')->nullable();
             $table->timestamps();
         });
     }

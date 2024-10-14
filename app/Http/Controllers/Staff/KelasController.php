@@ -16,7 +16,7 @@ class KelasController extends Controller
 {
     public function index(){
         $data = Kelas::with(['jurusan', 'tahunAjaran'])->get();
-        return Inertia::render('Admin/Staff/Pengaturan/Kelas/Index', [
+        return Inertia::render('Admin/Staff/Akademik/Kelas/Index', [
             'kelas' => KelasResource::collection($data)
         ]);
     }
@@ -24,7 +24,7 @@ class KelasController extends Controller
     public function create(){
         $jurusan = Jurusan::all();
         $tahunAjaran = TahunAjaran::all();
-        return Inertia::render('Admin/Staff/Pengaturan/Kelas/Create', [
+        return Inertia::render('Admin/Staff/Akademik/Kelas/Create', [
             'jurusan' => JurusanResource::collection($jurusan),
             'tahunAjaran' => TahunAjaranResource::collection($tahunAjaran)
         ]);
@@ -52,7 +52,7 @@ class KelasController extends Controller
         $jurusan = Jurusan::all();
         $tahunAjaran = TahunAjaran::all();
         $data = Kelas::with(['jurusan', 'tahunAjaran'])->findOrFail($id);
-        return Inertia::render('Admin/Staff/Pengaturan/Kelas/Edit', [
+        return Inertia::render('Admin/Staff/Akademik/Kelas/Edit', [
             'kelas' => new KelasResource($data),
             'jurusan' => JurusanResource::collection($jurusan),
             'tahunAjaran' => TahunAjaranResource::collection($tahunAjaran)

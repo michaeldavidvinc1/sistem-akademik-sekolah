@@ -8,6 +8,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import { Link, router } from "@inertiajs/react";
 import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
@@ -63,6 +64,7 @@ const columns = [
         id: "actions",
         cell: ({ row }) => {
             const data = row.original;
+            const { toast } = useToast();
             const handleDelete = (id) => {
                 Swal.fire({
                     title: "Are you sure?",
@@ -75,7 +77,15 @@ const columns = [
                     cancelButtonText: "Batal",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        router.delete(route("staff.tahun-ajaran.destroy", id));
+                        router.delete(route("staff.tahun-ajaran.destroy", id), {
+                            onSuccess: () => {
+                                toast({
+                                    variant: "success",
+                                    title: "Success!",
+                                    description: "Delete data successfully.",
+                                });
+                            },
+                        });
                     }
                 });
             };

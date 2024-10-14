@@ -6,8 +6,10 @@ use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
 use App\Http\Controllers\Staff\JurusanController;
 use App\Http\Controllers\Staff\KelasController;
+use App\Http\Controllers\Staff\MataPelajaranController;
 use App\Http\Controllers\Staff\SiswaController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\Staff\StaffPendaftaranSiswaController;
 use App\Http\Controllers\Staff\TahunAjaranController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +17,13 @@ use Inertia\Inertia;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');
+Route::get('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftaran'])->name('pendaftaran');
+Route::post('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftaran_store'])->name('pendaftaran.store');
 
 Route::get('/login', [AuthController::class, 'login_page'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 
 Route::get('/dashboard', function(){
@@ -34,7 +40,9 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.guru.update',
         'destroy' => 'staff.guru.destroy',
     ]);
-    Route::get("/guru/change-password/{id}", [GuruController::class, 'change_password'])->name('guru.change.password.page');
+    Route::get('/change-status-guru/{id}', [GuruController::class, 'change_status'])->name('guru.change.status');
+    Route::post("/guru/change-password/{id}", [GuruController::class, 'change_password'])->name('guru.change.password');
+
     Route::resource('/siswa-list', SiswaController::class)->names([
         'index' => 'staff.siswa.index',
         'create' => 'staff.siswa.create',
@@ -44,6 +52,8 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.siswa.update',
         'destroy' => 'staff.siswa.destroy',
     ]);
+    Route::post("/siswa/change-password/{id}", [SiswaController::class, 'change_password'])->name('siswa.change.password');
+
     Route::resource('/staff-list', StaffController::class)->names([
         'index' => 'staff.staff.index',
         'create' => 'staff.staff.create',
@@ -53,6 +63,9 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.staff.update',
         'destroy' => 'staff.staff.destroy',
     ]);
+    Route::get('/change-status-staff/{id}', [StaffController::class, 'change_status'])->name('staff.change.status');
+    Route::post("/staff/change-password/{id}", [StaffController::class, 'change_password'])->name('staff.change.password');
+
     Route::resource('/kelas-list', KelasController::class)->names([
         'index' => 'staff.kelas.index',
         'create' => 'staff.kelas.create',
@@ -62,7 +75,7 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.kelas.update',
         'destroy' => 'staff.kelas.destroy',
     ]);
-    Route::resource('/mapel-list', StaffController::class)->names([
+    Route::resource('/mapel-list', MataPelajaranController::class)->names([
         'index' => 'staff.mapel.index',
         'create' => 'staff.mapel.create',
         'store' => 'staff.mapel.store',
@@ -89,5 +102,12 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'update' => 'staff.tahun-ajaran.update',
         'destroy' => 'staff.tahun-ajaran.destroy',
     ]);
+
+    Route::get('/pendaftaran-siswa-list', [StaffPendaftaranSiswaController::class, 'index'])->name('staff.pendaftaran.list');
+    Route::get('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'edit'])->name('staff.pendaftaran.edit');
+    Route::put('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'update'])->name('staff.pendaftaran.update');
+    Route::delete('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'destroy'])->name('staff.pendaftaran.destroy');
+    Route::get('/approve-pendaftaran-siswa/{id}', [StaffPendaftaranSiswaController::class, 'approved_pendaftaran'])->name('staff.pendaftaran.approved');
+    Route::get('/decline-pendaftaran-siswa/{id}', [StaffPendaftaranSiswaController::class, 'decline_pendaftaran'])->name('staff.pendaftaran.decline');
     
 });

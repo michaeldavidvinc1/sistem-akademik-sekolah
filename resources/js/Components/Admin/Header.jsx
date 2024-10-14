@@ -11,6 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { MenuItems } from "./Sidebar";
+import { router } from "@inertiajs/react";
 
 const DashboardHeader = ({ setOpen, auth }) => {
     const items = [
@@ -29,9 +30,12 @@ const DashboardHeader = ({ setOpen, auth }) => {
             ],
         },
     ];
+    const handleLogout = () => {
+        router.post(route("logout"));
+    };
     return (
         <div>
-            <div className="flex items-center lg:justify-end justify-between px-10 py-4 border-b">
+            <div className="flex items-center lg:justify-end justify-between px-14 py-4 border-b">
                 <Sheet onOpenChange={() => setOpen(true)}>
                     <SheetTrigger>
                         <button
@@ -62,7 +66,7 @@ const DashboardHeader = ({ setOpen, auth }) => {
                     <DropdownMenu>
                         <DropdownMenuTrigger>
                             <Avatar>
-                                <AvatarImage src="/no_image.jpg" />
+                                <AvatarImage src="https://github.com/shadcn.png" />
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
@@ -71,7 +75,14 @@ const DashboardHeader = ({ setOpen, auth }) => {
                             <DropdownMenuItem>Profile</DropdownMenuItem>
                             <DropdownMenuItem>Billing</DropdownMenuItem>
                             <DropdownMenuItem>Team</DropdownMenuItem>
-                            <DropdownMenuItem>Subscription</DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <div
+                                    className="text-red-500 cursor-pointer flex items-center gap-2"
+                                    onClick={handleLogout}
+                                >
+                                    <LogOut className="w-4" /> Logout
+                                </div>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
