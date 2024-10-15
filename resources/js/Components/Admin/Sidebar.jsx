@@ -85,9 +85,9 @@ const MenuStaff = [
                 path: route("staff.pendaftaran.list"),
             },
             {
-                id: "dashboard.page",
+                id: "staff.pembayaran.list",
                 label: "Pembayaran SPP",
-                path: route("dashboard.page"),
+                path: route("staff.pembayaran.list"),
             },
         ],
     },

@@ -1,12 +1,24 @@
 import DashboardLayout from "@/Components/Admin/Layout";
+import { Link, router } from "@inertiajs/react";
+import React, { useState } from "react";
 import Datatable from "@/Components/Common/Datatable";
-import React from "react";
-import { columns } from "./Column";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { router } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 
-const Index = ({ auth, pendaftaran, queryParams = null, jurusan }) => {
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import { Input } from "@/Components/ui/input";
+
+import { columns } from "./Column";
+
+
+
+const Index = ({ auth, pembayaran, jurusan, queryParams = null }) => {
     queryParams = queryParams || {};
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -14,18 +26,17 @@ const Index = ({ auth, pendaftaran, queryParams = null, jurusan }) => {
         } else {
             delete queryParams[name];
         }
-        router.get(route("staff.pendaftaran.list"), queryParams);
+        router.get(route("staff.guru.index"), queryParams);
     };
 
     const handleReset = () => {
-        router.get(route("staff.pendaftaran.list"));
+        router.get(route("staff.guru.index"));
     };
+
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">
-                <h1 className="text-xl font-semibold">
-                    Pendaftaran Siswa List
-                </h1>
+                <h1 className="text-xl font-semibold">Pembayaran SPP List</h1>
             </div>
             <div className="mb-5">
                 <div className="flex justify-end gap-2 items-center">
@@ -54,30 +65,21 @@ const Index = ({ auth, pendaftaran, queryParams = null, jurusan }) => {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                    <Select
-                        name="status"
-                        value={queryParams?.status}
-                        onValueChange={(value) =>
-                            searchFieldChanged("status", value)
+                    <Input
+                        type="text"
+                        className="w-[200px]"
+                        value={queryParams?.nama_lengkap}
+                        placeholder="Filter nama siswa"
+                        onChange={(e) =>
+                            searchFieldChanged("nama_lengkap", e.target.value)
                         }
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Filter status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="decline">Decline</SelectItem>
-                                <SelectItem value="waiting">Waiting</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    />
                     <Button variant="ghost" onClick={handleReset}>
                         Reset
                     </Button>
                 </div>
             </div>
-            <Datatable columns={columns} data={pendaftaran.data} />
+            <Datatable columns={columns} data={pembayaran.data} />
         </DashboardLayout>
     );
 };

@@ -128,6 +128,32 @@ export const columns = [
                     }
                 });
             };
+
+            const handleDecline = (e) => {
+                e.preventDefault();
+                router.get(route('staff.pendaftaran.decline', data.id), {
+                    onSuccess: () => {
+                        toast({
+                            variant: "success",
+                            title: "Success!",
+                            description: "Decline pendaftaran siswa successfully.",
+                        });
+                    },
+                });
+            }
+
+            const handleApproved = (e) => {
+                e.preventDefault();
+                router.get(route('staff.pendaftaran.approved', data.id), {
+                    onSuccess: () => {
+                        toast({
+                            variant: "success",
+                            title: "Success!",
+                            description: "Approved pendaftaran siswa successfully.",
+                        });
+                    },
+                });
+            }
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -138,23 +164,27 @@ export const columns = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <span
-                                className=" flex gap-2 items-center cursor-pointer text-green-500"
-                                onClick={() => handleDelete(data.id)}
-                            >
-                                <ShieldCheck className="w-4" /> Approve
-                            </span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <span
-                                className=" flex gap-2 items-center cursor-pointer text-red-500"
-                                onClick={() => handleDelete(data.id)}
-                            >
-                                <ShieldX className="w-4" /> Decline
-                            </span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+                        {data.status === 'waiting' ? (
+                            <>
+                                <DropdownMenuItem>
+                                    <span
+                                        className=" flex gap-2 items-center cursor-pointer text-green-500"
+                                        onClick={handleApproved}
+                                    >
+                                        <ShieldCheck className="w-4" /> Approve
+                                    </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <span
+                                        className=" flex gap-2 items-center cursor-pointer text-red-500"
+                                        onClick={handleDecline}
+                                    >
+                                        <ShieldX className="w-4" /> Decline
+                                    </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                            </>
+                        ) : ""}
                         <DropdownMenuItem>
                             <Link
                                 href={route("staff.pendaftaran.edit", data.id)}

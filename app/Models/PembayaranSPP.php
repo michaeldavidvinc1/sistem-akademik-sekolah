@@ -13,6 +13,7 @@ class PembayaranSPP extends Model
         'siswa_id',
         'tanggal_pembayaran',
         'jumlah',
+        'bukti_bayar',
         'status_pembayaran',
     ];
 }

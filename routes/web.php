@@ -9,6 +9,8 @@ use App\Http\Controllers\Staff\KelasController;
 use App\Http\Controllers\Staff\MataPelajaranController;
 use App\Http\Controllers\Staff\SiswaController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\Staff\StaffDashboardController;
+use App\Http\Controllers\Staff\StaffPembayaranSppController;
 use App\Http\Controllers\Staff\StaffPendaftaranSiswaController;
 use App\Http\Controllers\Staff\TahunAjaranController;
 use Illuminate\Foundation\Application;
@@ -26,11 +28,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
-Route::get('/dashboard', function(){
-    return Inertia::render('Admin/Dashboard');
-})->name('dashboard.page')->middleware('auth');
 
-Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
+Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
+    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard.page');
     Route::resource('/guru-list', GuruController::class)->names([
         'index' => 'staff.guru.index',
         'create' => 'staff.guru.create',
@@ -103,11 +103,15 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function() {
         'destroy' => 'staff.tahun-ajaran.destroy',
     ]);
 
+    // Pendaftaran Siswa Baru Route
     Route::get('/pendaftaran-siswa-list', [StaffPendaftaranSiswaController::class, 'index'])->name('staff.pendaftaran.list');
     Route::get('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'edit'])->name('staff.pendaftaran.edit');
     Route::put('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'update'])->name('staff.pendaftaran.update');
     Route::delete('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'destroy'])->name('staff.pendaftaran.destroy');
     Route::get('/approve-pendaftaran-siswa/{id}', [StaffPendaftaranSiswaController::class, 'approved_pendaftaran'])->name('staff.pendaftaran.approved');
     Route::get('/decline-pendaftaran-siswa/{id}', [StaffPendaftaranSiswaController::class, 'decline_pendaftaran'])->name('staff.pendaftaran.decline');
-    
+
+    // Pembayaran SPP Siswa Route
+    Route::get('/pembayaran-spp', [StaffPembayaranSppController::class, 'index'])->name('staff.pembayaran.list');
 });
+

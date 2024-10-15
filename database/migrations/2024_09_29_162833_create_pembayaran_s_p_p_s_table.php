@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Siswa::class, 'siswa_id');
             $table->date('tanggal_pembayaran');
             $table->integer('jumlah');
+            $table->string('bukti_bayar');
             $table->enum('status_pembayaran', array('lunas', 'belum lunas'));
             $table->timestamps();
         });

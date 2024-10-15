@@ -20,7 +20,7 @@ class SiswaController extends Controller
         $jurusanId = request('jurusan_id');
         $namaLengkap = request('namaLengkap');
 
-        $query = Siswa::with(['user', 'kelas', 'jurusan']);
+        $query = Siswa::with(['user', 'kelas', 'jurusan'])->where('status', '=', 1);
 
         if ($kelasId) {
             $query->where('kelas_id', $kelasId);
