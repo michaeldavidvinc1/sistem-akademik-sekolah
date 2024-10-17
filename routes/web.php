@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Guru\GuruDashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\Staff\StaffDashboardController;
 use App\Http\Controllers\Staff\StaffPembayaranSppController;
 use App\Http\Controllers\Staff\StaffPendaftaranSiswaController;
+use App\Http\Controllers\Staff\StaffPenugasanGuruController;
 use App\Http\Controllers\Staff\TahunAjaranController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +32,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
-    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard.page');
+    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard.staff');
     Route::resource('/guru-list', GuruController::class)->names([
         'index' => 'staff.guru.index',
         'create' => 'staff.guru.create',
@@ -103,6 +105,16 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
         'destroy' => 'staff.tahun-ajaran.destroy',
     ]);
 
+    Route::resource('/penugasan-guru-list', StaffPenugasanGuruController::class)->names([
+        'index' => 'staff.penugasan.index',
+        'create' => 'staff.penugasan.create',
+        'store' => 'staff.penugasan.store',
+        'show' => 'staff.penugasan.show',
+        'edit' => 'staff.penugasan.edit',
+        'update' => 'staff.penugasan.update',
+        'destroy' => 'staff.penugasan.destroy',
+    ]);
+
     // Pendaftaran Siswa Baru Route
     Route::get('/pendaftaran-siswa-list', [StaffPendaftaranSiswaController::class, 'index'])->name('staff.pendaftaran.list');
     Route::get('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'edit'])->name('staff.pendaftaran.edit');
@@ -115,3 +127,6 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
     Route::get('/pembayaran-spp', [StaffPembayaranSppController::class, 'index'])->name('staff.pembayaran.list');
 });
 
+Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
+    Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard.guru');
+});

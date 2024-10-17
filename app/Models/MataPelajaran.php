@@ -18,4 +18,8 @@ class MataPelajaran extends Model
     public function jurusan(){
         return $this->belongsTo(Jurusan::class);
     }
+    
+    public function penugasan(){
+        return $this->hasMany(KelasMataPelajaran::class);
+    }
 }

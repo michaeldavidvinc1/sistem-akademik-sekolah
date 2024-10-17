@@ -27,4 +27,8 @@ class Kelas extends Model
     public function tahunAjaran(){
         return $this->belongsTo(TahunAjaran::class);
     }
+
+    public function penugasan(){
+        return $this->hasMany(KelasMataPelajaran::class);
+    }
 }

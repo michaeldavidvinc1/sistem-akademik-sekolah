@@ -28,5 +28,8 @@ class Guru extends Model
         return $this->belongsTo(Jurusan::class);
     }
 
+    public function penugasan(){
+        return $this->hasMany(KelasMataPelajaran::class);
+    }
 
 }

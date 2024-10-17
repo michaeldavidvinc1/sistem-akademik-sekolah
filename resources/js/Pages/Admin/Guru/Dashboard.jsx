@@ -5,7 +5,7 @@ const Dashboard = ({ auth }) => {
     return (
         <div>
             <DashboardLayout auth={auth}>
-                <h1>Dashboard</h1>
+                <h1>Dashboard Guru</h1>
             </DashboardLayout>
         </div>
     );

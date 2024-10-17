@@ -23,7 +23,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             
             $request->session()->regenerate();
-            return redirect()->route('dashboard.page');
+            if(Auth::user()->role === 'staff'){
+                return redirect()->route('dashboard.staff');
+            } else if(Auth::user()->role === 'guru'){
+                return redirect()->route('dashboard.guru');
+            }
         }
 
         return back()->withErrors([

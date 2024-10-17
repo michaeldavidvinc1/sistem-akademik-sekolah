@@ -11,18 +11,18 @@ import React, { useState } from "react";
 
 const MenuSiswa = [
     {
-        id: "dashboard.page",
+        id: "dashboard.guru",
         label: "Dashboard Siswa",
-        path: route("dashboard.page"),
+        path: route("dashboard.guru"),
         icon: <LayoutDashboard className="w-5" />,
     },
 ];
 
 const MenuStaff = [
     {
-        id: "dashboard.page",
+        id: "dashboard.staff",
         label: "Dashboard Staff",
-        path: route("dashboard.page"),
+        path: route("dashboard.staff"),
         icon: <LayoutDashboard className="w-5" />,
     },
     {
@@ -46,9 +46,9 @@ const MenuStaff = [
                 path: route("staff.mapel.index"),
             },
             {
-                id: "staff.mapel.index",
+                id: "staff.penugasan.index",
                 label: "Penugasan Guru",
-                path: route("staff.mapel.index"),
+                path: route("staff.penugasan.index"),
             },
         ],
     },
@@ -112,9 +112,9 @@ const MenuStaff = [
 
 const MenuGuru = [
     {
-        id: "dashboard.page",
+        id: "dashboard.guru",
         label: "Dashboard Guru",
-        path: route("dashboard.page"),
+        path: route("dashboard.guru"),
         icon: <LayoutDashboard className="w-5" />,
     },
 ];
