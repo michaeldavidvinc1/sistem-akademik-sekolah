@@ -38,4 +38,8 @@ class Siswa extends Model
     public function pendaftaran(){
         return $this->hasOne(Pendaftaran::class);
     }
+
+    public function absensi(){
+        return $this->hasMnay(Absensi::class);
+    }
 }

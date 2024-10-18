@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('nilais', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Penilaian::class, 'penilaian_id');
-            $table->foreignIdFor(Siswa::class, 'siswa_id');
             $table->integer('nilai');
             $table->timestamps();
         });

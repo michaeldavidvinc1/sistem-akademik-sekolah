@@ -1,10 +1,13 @@
 import {
+    Award,
+    Calendar,
     ChevronDown,
     GraduationCap,
     HandCoins,
     LayoutDashboard,
     Settings2,
     UserPlus,
+    Users,
     UsersRound,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -116,6 +119,57 @@ const MenuGuru = [
         label: "Dashboard Guru",
         path: route("dashboard.guru"),
         icon: <LayoutDashboard className="w-5" />,
+    },
+    {
+        id: "guru.daftar.siswa",
+        label: "Daftar Siswa",
+        path: route("guru.daftar.siswa"),
+        icon: <Users className="w-5" />,
+    },
+    {
+        id: "guru.absensi.form",
+        label: "Absensi",
+        path: route("guru.absensi.form"),
+        icon: <Calendar className="w-5" />,
+    },
+    {
+        id: "penilaian-siswa",
+        label: "Penilaian",
+        icon: <Award className="w-5" />,
+        children: [
+            {
+                id: "staff.pendaftaran.list",
+                label: "Nilai Harian",
+                path: route("staff.pendaftaran.list"),
+            },
+            {
+                id: "staff.pembayaran.list",
+                label: "Nilai UTS",
+                path: route("staff.pembayaran.list"),
+            },
+            {
+                id: "staff.pembayaran.list",
+                label: "Nilai UAS",
+                path: route("staff.pembayaran.list"),
+            },
+        ],
+    },
+    {
+        id: "raport",
+        label: "Raport",
+        icon: <GraduationCap className="w-5" />,
+        children: [
+            {
+                id: "staff.pendaftaran.list",
+                label: "Rekap Nilai Akhir",
+                path: route("staff.pendaftaran.list"),
+            },
+            {
+                id: "staff.pembayaran.list",
+                label: "Cetak Raport",
+                path: route("staff.pembayaran.list"),
+            },
+        ],
     },
 ];
 

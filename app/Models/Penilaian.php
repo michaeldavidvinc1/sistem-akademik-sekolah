@@ -12,7 +12,6 @@ class Penilaian extends Model
     protected $fillable = [
         'siswa_id',
         'kelas_mata_pelajaran_id',
-        'guru_id',
         'jenis_penilaian',
         'tanggal_penilaian',
     ];

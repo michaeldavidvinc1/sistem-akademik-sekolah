@@ -11,7 +11,6 @@ class Nilai extends Model
 
     protected $fillable = [
         'penilaian_id',
-        'siswa_id',
         'nilai',
     ];
 }

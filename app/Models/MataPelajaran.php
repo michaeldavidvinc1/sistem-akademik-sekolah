@@ -22,4 +22,8 @@ class MataPelajaran extends Model
     public function penugasan(){
         return $this->hasMany(KelasMataPelajaran::class);
     }
+
+    public function absensi(){
+        return $this->hasMnay(Absensi::class);
+    }
 }

@@ -13,7 +13,7 @@ const TextInput = ({
     ...props
 }) => {
     return (
-        <div className="flex flex-col gap-2">
+        <div className="space-y-2">
             <label className="text-sm font-bold" htmlFor={name}>
                 {label}
             </label>
@@ -24,7 +24,7 @@ const TextInput = ({
                 value={value}
                 onChange={onChange}
                 className={`p-inputtext-sm ${
-                    errorMessage ? "border-red-500" : "border-primary/60"
+                    errorMessage ? "border-red-500" : ""
                 }`}
                 {...props}
             />

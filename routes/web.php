@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Guru\AbsensiController;
+use App\Http\Controllers\Guru\DaftarSiswaController;
 use App\Http\Controllers\Guru\GuruDashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Staff\FeatureAdminController;
@@ -129,4 +131,11 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
 
 Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard.guru');
+
+    // Daftar Siswa Route
+    Route::get('/daftar-siswa', [DaftarSiswaController::class, 'index'])->name('guru.daftar.siswa');
+
+    // Absensi Route
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('guru.absensi.form');
+    Route::post('/absensi', [AbsensiController::class, 'store'])->name('guru.absensi.store');
 });
