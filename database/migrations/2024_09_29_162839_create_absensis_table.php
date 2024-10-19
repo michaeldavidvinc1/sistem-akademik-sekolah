@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('status_kehadiran');
             $table->string('keterangan')->nullable();
             $table->foreignIdFor(Kelas::class, 'kelas_id');
-            $table->foreignIdFor(MataPelajaran::class, 'mata_pelajaran_id');
             $table->foreignIdFor(Guru::class, 'guru_id');
             $table->timestamps();
         });

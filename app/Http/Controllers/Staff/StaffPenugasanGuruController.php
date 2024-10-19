@@ -19,9 +19,36 @@ class StaffPenugasanGuruController extends Controller
 {
     public function index()
     {
-        $data = KelasMataPelajaran::with(['guru', 'mataPelajaran', 'kelas'])->get();
+
+        $kelasId = request('kelas_id');
+        $MapelId = request('mata_pelajaran_id');
+        $guruId = request('guru_id');
+
+        $query = KelasMataPelajaran::with(['guru', 'mataPelajaran', 'kelas']);
+
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
+        }
+        
+        if ($MapelId) {
+            $query->where('mata_pelajaran_id', $MapelId);
+        }
+
+        if ($guruId) {
+            $query->where('guru_id', $guruId);
+        }
+
+        $data = $query->get();
+
+        $guru = Guru::all();
+        $mataPelajaran = MataPelajaran::all();
+        $kelas = Kelas::all();
         return Inertia::render('Admin/Staff/Akademik/PenugasanGuru/Index', [
-            'penugasan' => PenugasanGuruResource::collection($data)
+            'penugasan' => PenugasanGuruResource::collection($data),
+            'queryParams' => request()->query() ?: null,
+            'guru' => GuruResource::collection($guru),
+            'mataPelajaran' => MataPelajaranResource::collection($mataPelajaran),
+            'kelas' => KelasResource::collection($kelas),
         ]);
     }
 

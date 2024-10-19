@@ -1,130 +1,83 @@
 import DashboardLayout from "@/Components/Admin/Layout";
 import Datatable from "@/Components/Common/Datatable";
-import { Button } from "@/Components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
-import { useToast } from "@/hooks/use-toast";
 import { Link, router } from "@inertiajs/react";
-import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import React from "react";
-import Swal from "sweetalert2";
+import { columns } from "./Column";
+import { GraduationCap, Search, Users } from "lucide-react";
+import { Button } from "@/Components/ui/button";
+import { Card, CardContent } from "@/Components/ui/card";
+import { Input } from "@/Components/ui/input";
 
-const columns = [
-    {
-        accessorKey: "no",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    No
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => row.index + 1,
-    },
-    {
-        accessorKey: "kode_jurusan",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    Kode Jurusan
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-    },
-    {
-        accessorKey: "nama_jurusan",
-        header: "Nama Jurusan",
-    },
-    {
-        accessorKey: "created_at",
-        header: "Created at",
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => {
-            const data = row.original;
-            const { toast } = useToast();
-            const handleDelete = (id) => {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You cannot undo this data again!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Iya, Hapus",
-                    cancelButtonText: "Batal",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        router.delete(route("staff.jurusan.destroy", id), {
-                            onSuccess: () => {
-                                toast({
-                                    variant: "success",
-                                    title: "Success!",
-                                    description: "Delete data successfully.",
-                                });
-                            },
-                        });
-                    }
-                });
-            };
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <Link
-                                href={route("staff.jurusan.edit", data.id)}
-                                className=" flex gap-2 items-center "
-                            >
-                                <SquarePen className="w-4" /> Edit
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <span
-                                className=" flex gap-2 items-center cursor-pointer"
-                                onClick={() => handleDelete(data.id)}
-                            >
-                                <Trash2 className="w-4" /> Delete
-                            </span>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
-    },
-];
+const Index = ({ auth, jurusan, queryParams = null }) => {
+    queryParams = queryParams || {};
+    const searchFieldChanged = (name, value) => {
+        if (value) {
+            queryParams[name] = value;
+        } else {
+            delete queryParams[name];
+        }
+        router.get(route("staff.jurusan.index"), queryParams);
+    };
 
-const Index = ({ auth, jurusan }) => {
+    const handleReset = () => {
+        router.get(route("staff.jurusan.index"));
+    };
+
     return (
         <DashboardLayout auth={auth}>
-            <div className="flex justify-between items-center pb-5">
-                <h1 className="text-xl font-semibold">Jurusan List</h1>
-                <Link
-                    className="bg-primary text-white text-sm px-3 py-2 font-semibold rounded-lg hover:bg-primary/90"
-                    href={route("staff.jurusan.create")}
-                >
-                    Add Data
-                </Link>
+            <div className="space-y-6">
+                <div className="flex justify-between items-center bg-gradient-to-r from-blue-600 to-blue-400 p-6 rounded-lg shadow-lg">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                            <GraduationCap className="h-6 w-6" />
+                            Jurusan List
+                        </h1>
+                        <p className="text-blue-100">
+                            Manage and view all jurusan data
+                        </p>
+                    </div>
+                    <Link href={route("staff.jurusan.create")}>
+                        <Button className="bg-white text-blue-600 hover:bg-blue-50">
+                            Add Data
+                        </Button>
+                    </Link>
+                </div>
             </div>
-            <Datatable columns={columns} data={jurusan.data} />
+            {/* Filter Section */}
+            <Card className="mt-6">
+                <CardContent className="pt-6">
+                    <div className="flex justify-end">
+                        <div className="w-full max-w-sm space-y-2">
+                            <label className="text-sm font-medium flex items-center gap-2">
+                                <Search className="h-4 w-4 text-gray-500" />
+                                Search
+                            </label>
+                            <div className="flex gap-2">
+                                <Input
+                                    type="text"
+                                    value={queryParams?.namaJurusan}
+                                    placeholder="Filter Nama Jurusan"
+                                    onBlur={(e) =>
+                                        searchFieldChanged(
+                                            "namaJurusan",
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                                <Button variant="outline" onClick={handleReset}>
+                                    Reset
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+            {/* Data Table */}
+            <Card className="mt-6">
+                <CardContent className="pt-6">
+                    <Datatable columns={columns} data={jurusan.data} />
+                </CardContent>
+            </Card>
         </DashboardLayout>
     );
 };

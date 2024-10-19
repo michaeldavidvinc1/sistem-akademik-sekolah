@@ -16,22 +16,26 @@ class MataPelajaranSeeder extends Seeder
         MataPelajaran::create([
             'kode_mata_pelajaran' => 'MTK',
             'nama_mata_pelajaran' => 'Matematika',
-            'jurusan_id' => 1
+            'jurusan_id' => 1,
+            'kkm' => 85,
         ]);
         MataPelajaran::create([
             'kode_mata_pelajaran' => 'B.INDONESIA',
             'nama_mata_pelajaran' => 'Bahasa Indonesia',
-            'jurusan_id' => 1
+            'jurusan_id' => 1,
+            'kkm' => 80,
         ]);
         MataPelajaran::create([
             'kode_mata_pelajaran' => 'B.INGGRIS',
             'nama_mata_pelajaran' => 'Bahasa Inggris',
-            'jurusan_id' => 1
+            'jurusan_id' => 1,
+            'kkm' => 80,
         ]);
         MataPelajaran::create([
             'kode_mata_pelajaran' => 'SEJARAH',
             'nama_mata_pelajaran' => 'Sejarah',
-            'jurusan_id' => 1
+            'jurusan_id' => 1,
+            'kkm' => 80,
         ]);
     }
 }

@@ -20,8 +20,15 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Textarea } from "@/Components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { router } from "@inertiajs/react";
-import { Calendar, CheckCircle2, Clock, GraduationCap, Users } from "lucide-react";
+import {
+    Calendar,
+    CheckCircle2,
+    Clock,
+    GraduationCap,
+    Users,
+} from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 const Index = ({
@@ -34,6 +41,8 @@ const Index = ({
 }) => {
     queryParams = queryParams || {};
     const [attendanceData, setAttendanceData] = useState([]);
+    const [isInitialMount, setIsInitialMount] = useState(true);
+    const { toast } = useToast();
 
     const getTodayDate = () => {
         const today = new Date();
@@ -44,30 +53,52 @@ const Index = ({
     };
 
     const [searchParams, setSearchParams] = useState({
-        kelas_id: queryParams.kelas_id || "",
+        kelas_id: queryParams.kelas_id || kelas.data[0].id.toString(),
         tanggal: queryParams.tanggal || getTodayDate(),
     });
 
     useEffect(() => {
-        if (!searchParams.kelas_id && kelas.data.length > 0) {
-            setSearchParams((prev) => ({
-                ...prev,
-                kelas_id: kelas.data[0].id.toString(),
-            }));
+        if (isInitialMount && kelas.data.length > 0 && !queryParams?.kelas_id) {
+            const currentUrl = new URL(window.location.href);
+            const initialKelasId = kelas.data[0].id.toString();
+            const initialDate = getTodayDate();
+
+            // Only update URL if parameters are not already present
+            if (
+                !currentUrl.searchParams.get("kelas_id") ||
+                !currentUrl.searchParams.get("tanggal")
+            ) {
+                router.get(
+                    route("guru.absensi.form"),
+                    {
+                        kelas_id: initialKelasId,
+                        tanggal: initialDate,
+                    },
+                    {
+                        preserveState: true,
+                        preserveScroll: true,
+                        replace: true, // Use replace instead of push to avoid adding to browser history
+                    }
+                );
+            }
+            setIsInitialMount(false);
         }
+    }, [kelas.data, isInitialMount]);
+
+    // Update attendance data when siswa data changes
+    useEffect(() => {
         if (siswa.data) {
             const initialData = siswa.data.map((item) => ({
                 siswa_id: item.id,
-                status_kehadiran: "", // default empty
-                keterangan: "", // default empty
+                status_kehadiran: "",
+                keterangan: "",
                 kelas_id: searchParams.kelas_id,
                 tanggal: searchParams.tanggal,
-                mata_pelajaran_id: null,
                 guru_id: auth.user.id,
             }));
             setAttendanceData(initialData);
         }
-    }, [kelas.data, siswa.data]);
+    }, [siswa.data]);
 
     // Function to update search params and trigger route change
     const searchFieldChanged = (name, value) => {
@@ -75,9 +106,16 @@ const Index = ({
             ...prev,
             [name]: value,
         }));
-        // Update queryParams and trigger router.get
-        const newQueryParams = { ...queryParams, [name]: value };
-        router.get(route("staff.guru.index"), newQueryParams);
+
+        router.get(
+            route("guru.absensi.form"),
+            { ...searchParams, [name]: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            }
+        );
     };
 
     const handleFieldChange = (index, field, value) => {
@@ -91,9 +129,21 @@ const Index = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         // Send the attendance data to the backend
-        router.post(route("guru.absensi.store"), {
-            attendance: attendanceData,
-        });
+        router.post(
+            route("guru.absensi.store"),
+            {
+                attendance: attendanceData,
+            },
+            {
+                onSuccess: () => {
+                    toast({
+                        variant: "success",
+                        title: "Success!",
+                        description: "Submit absensi successfully!",
+                    });
+                },
+            }
+        );
     };
 
     const formatTime = () => {
@@ -171,7 +221,11 @@ const Index = ({
                                     <p className="text-sm text-gray-500">
                                         Status
                                     </p>
-                                    <p className="font-medium">Belum Submit</p>
+                                    <p className="font-medium">
+                                        {sudahAbsen
+                                            ? "Sudah Submit"
+                                            : "Belum Submit"}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +284,9 @@ const Index = ({
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card>
-                    <CardContent className="p-0">
-                        <form onSubmit={handleSubmit}>
+                {sudahAbsen ? (
+                    <Card>
+                        <CardContent className="p-0">
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-gray-50 hover:bg-gray-50">
@@ -255,7 +308,7 @@ const Index = ({
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {siswa.data.map((item, index) => (
+                                    {absensi.data.map((item, index) => (
                                         <TableRow
                                             key={index}
                                             className="hover:bg-gray-50/50"
@@ -264,90 +317,172 @@ const Index = ({
                                                 {index + 1}
                                             </TableCell>
                                             <TableCell className="font-medium">
-                                                {item.nama_lengkap}
+                                                {item.siswa.nama_lengkap}
                                             </TableCell>
                                             <TableCell className="text-gray-600">
                                                 {item.kelas.nama_kelas}
                                             </TableCell>
                                             <TableCell>
-                                                <Select
-                                                    value={
-                                                        attendanceData[index]
-                                                            ?.status_kehadiran
-                                                    }
-                                                    onValueChange={(value) =>
-                                                        handleFieldChange(
-                                                            index,
-                                                            "status_kehadiran",
-                                                            value
-                                                        )
-                                                    }
+                                                <div
+                                                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm
+                                        ${
+                                            item.status_kehadiran === "hadir"
+                                                ? "bg-green-100 text-green-600"
+                                                : item.status_kehadiran ===
+                                                  "sakit"
+                                                ? "bg-yellow-100 text-yellow-600"
+                                                : item.status_kehadiran ===
+                                                  "izin"
+                                                ? "bg-blue-100 text-blue-600"
+                                                : "bg-red-100 text-red-600"
+                                        }`}
                                                 >
-                                                    <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="Pilih Status" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem
-                                                            value="hadir"
-                                                            className="text-green-600"
-                                                        >
-                                                            ✓ Hadir
-                                                        </SelectItem>
-                                                        <SelectItem
-                                                            value="sakit"
-                                                            className="text-yellow-600"
-                                                        >
-                                                            🤒 Sakit
-                                                        </SelectItem>
-                                                        <SelectItem
-                                                            value="izin"
-                                                            className="text-blue-600"
-                                                        >
-                                                            ℹ️ Izin
-                                                        </SelectItem>
-                                                        <SelectItem
-                                                            value="alpha"
-                                                            className="text-red-600"
-                                                        >
-                                                            ✗ Alpha
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
+                                                    {item.status_kehadiran ===
+                                                    "hadir"
+                                                        ? "✓ Hadir"
+                                                        : item.status_kehadiran ===
+                                                          "sakit"
+                                                        ? "🤒 Sakit"
+                                                        : item.status_kehadiran ===
+                                                          "izin"
+                                                        ? "ℹ️ Izin"
+                                                        : "✗ Alpha"}
+                                                </div>
                                             </TableCell>
                                             <TableCell>
-                                                <Textarea
-                                                    placeholder="Tambahkan keterangan..."
-                                                    value={
-                                                        attendanceData[index]
-                                                            ?.keterangan
-                                                    }
-                                                    onChange={(e) =>
-                                                        handleFieldChange(
-                                                            index,
-                                                            "keterangan",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="min-h-[80px] resize-none"
-                                                />
+                                                <p className="text-gray-600">
+                                                    {item.keterangan || "-"}
+                                                </p>
                                             </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
-                            <div className="p-4 border-t bg-gray-50/50">
-                                <div className="flex justify-end">
-                                    <Button
-                                        type="submit"
-                                        className="bg-blue-600 hover:bg-blue-700 text-white px-6"
-                                    >
-                                        Submit Absensi
-                                    </Button>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <Card>
+                        <CardContent className="p-0">
+                            <form onSubmit={handleSubmit}>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-gray-50 hover:bg-gray-50">
+                                            <TableHead className="w-16 text-center">
+                                                No
+                                            </TableHead>
+                                            <TableHead className="font-semibold">
+                                                Nama Lengkap
+                                            </TableHead>
+                                            <TableHead className="font-semibold">
+                                                Kelas
+                                            </TableHead>
+                                            <TableHead className="font-semibold">
+                                                Status
+                                            </TableHead>
+                                            <TableHead className="font-semibold">
+                                                Keterangan
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {siswa.data.map((item, index) => (
+                                            <TableRow
+                                                key={index}
+                                                className="hover:bg-gray-50/50"
+                                            >
+                                                <TableCell className="text-center font-medium text-gray-600">
+                                                    {index + 1}
+                                                </TableCell>
+                                                <TableCell className="font-medium">
+                                                    {item.nama_lengkap}
+                                                </TableCell>
+                                                <TableCell className="text-gray-600">
+                                                    {item.kelas.nama_kelas}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Select
+                                                        value={
+                                                            attendanceData[
+                                                                index
+                                                            ]?.status_kehadiran
+                                                        }
+                                                        onValueChange={(
+                                                            value
+                                                        ) =>
+                                                            handleFieldChange(
+                                                                index,
+                                                                "status_kehadiran",
+                                                                value
+                                                            )
+                                                        }
+                                                    >
+                                                        <SelectTrigger className="w-[180px]">
+                                                            <SelectValue placeholder="Pilih Status" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem
+                                                                value="hadir"
+                                                                className="text-green-600"
+                                                            >
+                                                                ✓ Hadir
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value="sakit"
+                                                                className="text-yellow-600"
+                                                            >
+                                                                🤒 Sakit
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value="izin"
+                                                                className="text-blue-600"
+                                                            >
+                                                                ℹ️ Izin
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value="alpha"
+                                                                className="text-red-600"
+                                                            >
+                                                                ✗ Alpha
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Textarea
+                                                        placeholder="Tambahkan keterangan..."
+                                                        value={
+                                                            attendanceData[
+                                                                index
+                                                            ]?.keterangan
+                                                        }
+                                                        onChange={(e) =>
+                                                            handleFieldChange(
+                                                                index,
+                                                                "keterangan",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="min-h-[80px] resize-none"
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                <div className="p-4 border-t bg-gray-50/50">
+                                    <div className="flex justify-end">
+                                        <Button
+                                            type="submit"
+                                            className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+                                        >
+                                            Submit Absensi
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </CardContent>
-                </Card>
+                            </form>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         </DashboardLayout>
     );

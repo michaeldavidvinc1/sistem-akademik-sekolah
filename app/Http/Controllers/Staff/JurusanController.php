@@ -11,9 +11,15 @@ use Inertia\Inertia;
 class JurusanController extends Controller
 {
     public function index(){
-        $data = Jurusan::all();
+        $namaJurusan = request('namaJurusan');
+        $query = Jurusan::query();
+        if ($namaJurusan) {
+            $query->where('nama_jurusan', 'LIKE', '%' . $namaJurusan . '%');
+        }
+        $data = $query->get();
         return Inertia::render('Admin/Staff/Akademik/Jurusan/Index', [
-            'jurusan' => JurusanResource::collection($data)
+            'jurusan' => JurusanResource::collection($data),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 

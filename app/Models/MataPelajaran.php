@@ -13,6 +13,7 @@ class MataPelajaran extends Model
         'kode_mata_pelajaran',
         'nama_mata_pelajaran',
         'jurusan_id',
+        'kkm',
     ];
 
     public function jurusan(){

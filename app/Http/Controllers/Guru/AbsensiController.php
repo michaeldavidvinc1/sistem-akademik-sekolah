@@ -25,9 +25,7 @@ class AbsensiController extends Controller
             ->where('kelas_id', $kelasId)
             ->where('tanggal', $tanggal)
             ->get();
-
         $sudahAbsen = $absensi->isNotEmpty();
-
         $guruId = Guru::where('user_id', Auth::user()->id)->value('id');
         $kelasIds = KelasMataPelajaran::where('guru_id', $guruId)->pluck('kelas_id');
         $kelas = Kelas::whereIn('id', $kelasIds)->get();
@@ -44,6 +42,17 @@ class AbsensiController extends Controller
     }
 
     public function store(Request $request){
-        return $request->all();
+        $attendance = $request->attendance;
+
+        foreach ($attendance as $item) {
+            Absensi::create([
+                'siswa_id' => $item['siswa_id'],
+                'tanggal' => $item['tanggal'],
+                'status_kehadiran' => $item['status_kehadiran'],
+                'keterangan' => $item['keterangan'],
+                'kelas_id' => $item['kelas_id'],
+                'guru_id' => $item['guru_id'],
+            ]);
+        }
     }
 }

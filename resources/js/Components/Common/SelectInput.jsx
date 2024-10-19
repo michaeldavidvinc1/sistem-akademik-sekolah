@@ -9,12 +9,13 @@ const SelectInput = ({
     label,
     errorMessage,
     children,
+    notEmpty,
     ...props
 }) => {
     return (
         <div className="space-y-2">
             <label className="text-sm font-bold" htmlFor={name}>
-                {label}
+                {label} {notEmpty ? <span className="text-red-500">*</span> : ""}
             </label>
             <Select
                 name={name}

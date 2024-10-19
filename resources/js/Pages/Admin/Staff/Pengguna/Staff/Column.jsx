@@ -21,9 +21,15 @@ import {
     Trash2,
 } from "lucide-react";
 import { Link, router, useForm } from "@inertiajs/react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/Components/ui/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/Components/ui/dialog";
 import TextInput from "@/Components/Common/TextInput";
-import {useState} from "react"
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export const columns = [
@@ -117,27 +123,31 @@ export const columns = [
 
             const handleChangeStatus = (e) => {
                 e.preventDefault();
-                router.get(route('staff.change.status', dataRow.id), {}, {
-                    onSuccess: () => {
-                        toast({
-                            variant: "success",
-                            title: "Success!",
-                            description: "Change status successfully.",
-                        });
-                    },
-                })
-            }
+                router.get(
+                    route("staff.change.status", dataRow.id),
+                    {},
+                    {
+                        onSuccess: () => {
+                            toast({
+                                variant: "success",
+                                title: "Success!",
+                                description: "Change status successfully.",
+                            });
+                        },
+                    }
+                );
+            };
 
             const handleChangePassword = (e) => {
                 e.preventDefault();
                 post(route("staff.change.password", dataRow.id), {
                     onSuccess: () => {
-                        reset('confirm_password', 'password'),
-                        toast({
-                            variant: "success",
-                            title: "Success!",
-                            description: "Change password successfully.",
-                        });
+                        reset("confirm_password", "password"),
+                            toast({
+                                variant: "success",
+                                title: "Success!",
+                                description: "Change password successfully.",
+                            });
                     },
                 });
             };
@@ -169,7 +179,10 @@ export const columns = [
                                         </DialogTitle>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
-                                        <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
+                                        <form
+                                            onSubmit={handleChangePassword}
+                                            className="flex flex-col gap-4"
+                                        >
                                             <div className="relative">
                                                 <TextInput
                                                     id="password"
@@ -280,7 +293,7 @@ export const columns = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <Link
-                                href={route("staff.guru.edit", dataRow.id)}
+                                href={route("staff.staff.edit", dataRow.id)}
                                 className=" flex gap-2 items-center "
                             >
                                 <SquarePen className="w-4" /> Edit
@@ -288,7 +301,7 @@ export const columns = [
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <span
-                                className=" flex gap-2 items-center cursor-pointer"
+                                className=" flex gap-2 items-center cursor-pointer text-red-500"
                                 onClick={() => handleDelete(dataRow.id)}
                             >
                                 <Trash2 className="w-4" /> Delete

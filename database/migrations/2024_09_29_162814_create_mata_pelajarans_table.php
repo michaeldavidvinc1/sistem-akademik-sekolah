@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('kode_mata_pelajaran');
             $table->string('nama_mata_pelajaran');
-            $table->foreignIdFor(Jurusan::class, 'jurusan_id');
+            $table->foreignIdFor(Jurusan::class, 'jurusan_id')->nullable();
+            $table->integer('kkm');
             $table->timestamps();
         });
     }

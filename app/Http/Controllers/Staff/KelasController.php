@@ -15,9 +15,25 @@ use Inertia\Inertia;
 class KelasController extends Controller
 {
     public function index(){
-        $data = Kelas::with(['jurusan', 'tahunAjaran'])->get();
+        $jurusanId = request('jurusan_id');
+        $namaKelas = request('namaKelas');
+
+        $query = Kelas::with(['jurusan', 'tahunAjaran']);
+
+        if ($jurusanId) {
+            $query->where('jurusan_id', $jurusanId);
+        }
+
+        if ($namaKelas) {
+            $query->where('nama_kelas', 'LIKE', '%' . $namaKelas . '%');
+        }
+
+        $data = $query->get();
+
+        $jurusan = Jurusan::all();
         return Inertia::render('Admin/Staff/Akademik/Kelas/Index', [
-            'kelas' => KelasResource::collection($data)
+            'kelas' => KelasResource::collection($data),
+            'jurusan' => JurusanResource::collection($jurusan)
         ]);
     }
 

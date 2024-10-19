@@ -3,7 +3,6 @@ import { Link, router } from "@inertiajs/react";
 import React, { useState } from "react";
 import Datatable from "@/Components/Common/Datatable";
 import { Button } from "@/Components/ui/button";
-
 import {
     Select,
     SelectContent,
@@ -13,7 +12,6 @@ import {
     SelectValue,
 } from "@/Components/ui/select";
 import { Input } from "@/Components/ui/input";
-
 import { columns } from "./Column";
 import { Card, CardContent } from "@/Components/ui/card";
 import { BookOpen, Calendar, Search, Users } from "lucide-react";

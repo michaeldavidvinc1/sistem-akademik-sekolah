@@ -1,16 +1,9 @@
-import { Button } from "@/Components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/Components/ui/dropdown-menu";
 import Swal from "sweetalert2";
 import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
-import { Link, router } from "@inertiajs/react";
+import { Button } from "@/Components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-
+import { Link, router } from "@inertiajs/react";
 
 export const columns = [
     {
@@ -31,7 +24,7 @@ export const columns = [
         cell: ({ row }) => row.index + 1,
     },
     {
-        accessorKey: "nama_mata_pelajaran",
+        accessorKey: "kode_jurusan",
         header: ({ column }) => {
             return (
                 <Button
@@ -40,23 +33,19 @@ export const columns = [
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                 >
-                    Nama Mata Pelajaran
+                    Kode Jurusan
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
         },
     },
     {
-        accessorKey: "kode_mata_pelajaran",
-        header: "Kode Mata Pelajaran",
+        accessorKey: "nama_jurusan",
+        header: "Nama Jurusan",
     },
     {
-        accessorKey: "jurusan.nama_jurusan",
-        header: "Jurusan",
-    },
-    {
-        accessorKey: "kkm",
-        header: "KKM",
+        accessorKey: "created_at",
+        header: "Created at",
     },
     {
         id: "actions",
@@ -75,7 +64,7 @@ export const columns = [
                     cancelButtonText: "Batal",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        router.delete(route("staff.mapel.destroy", id), {
+                        router.delete(route("staff.jurusan.destroy", id), {
                             onSuccess: () => {
                                 toast({
                                     variant: "success",
@@ -99,7 +88,7 @@ export const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={route("staff.mapel.edit", data.id)}
+                                href={route("staff.jurusan.edit", data.id)}
                                 className=" flex gap-2 items-center "
                             >
                                 <SquarePen className="w-4" /> Edit

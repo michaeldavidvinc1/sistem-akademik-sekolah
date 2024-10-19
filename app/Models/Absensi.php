@@ -15,7 +15,6 @@ class Absensi extends Model
         'status_kehadiran',
         'keterangan',
         'kelas_id', 
-        'mata_pelajaran_id',
         'guru_id'
     ];
 

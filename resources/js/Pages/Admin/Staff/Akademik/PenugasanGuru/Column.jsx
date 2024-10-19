@@ -54,6 +54,10 @@ export const columns = [
         header: "Nama Guru",
     },
     {
+        accessorKey: "mataPelajaran.kkm",
+        header: "KKM",
+    },
+    {
         accessorKey: "created_at",
         header: "Created At",
     },
@@ -106,7 +110,7 @@ export const columns = [
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <span
-                                className=" flex gap-2 items-center cursor-pointer"
+                                className=" flex gap-2 items-center cursor-pointer text-red-500"
                                 onClick={() => handleDelete(data.id)}
                             >
                                 <Trash2 className="w-4" /> Delete

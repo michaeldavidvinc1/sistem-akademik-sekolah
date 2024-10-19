@@ -136,6 +136,7 @@ export const columns = [
                                                     errorMessage={
                                                         errors.password
                                                     }
+                                                    notEmpty
                                                 />
                                                 <span
                                                     className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center cursor-pointer"
@@ -175,6 +176,7 @@ export const columns = [
                                                     errorMessage={
                                                         errors.confirm_password
                                                     }
+                                                    notEmpty
                                                 />
                                                 <span
                                                     className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center cursor-pointer"

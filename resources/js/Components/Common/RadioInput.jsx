@@ -10,12 +10,13 @@ const RadioInput = ({
     name,
     onChange,
     value,
+    notEmpty,
     ...props
 }) => {
     return (
         <div className="flex flex-col gap-2">
             <label className="text-sm font-bold" htmlFor={name}>
-                {label}
+                {label} {notEmpty ? <span className="text-red-500">*</span> : ""}
             </label>
             <RadioGroup className="flex items-center gap-5">
                 {category.map((category, index) => {

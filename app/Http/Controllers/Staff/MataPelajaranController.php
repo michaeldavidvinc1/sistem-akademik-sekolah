@@ -14,9 +14,25 @@ class MataPelajaranController extends Controller
 {
     public function index()
     {
-        $data = MataPelajaran::with(['jurusan'])->get();
+        $jurusanId = request('jurusan_id');
+        $namaMapel = request('namaMapel');
+        $query = MataPelajaran::with(['jurusan']);
+
+        if ($jurusanId) {
+            $query->where('jurusan_id', $jurusanId);
+        }
+
+        if ($namaMapel) {
+            $query->where('nama_mata_pelajaran', 'LIKE', '%' . $namaMapel . '%');
+        }
+
+        $data = $query->get();
+
+        $jurusan = Jurusan::all();
         return Inertia::render('Admin/Staff/Akademik/Mapel/Index', [
-            'mataPelajaran' => MataPelajaranResource::collection($data)
+            'mataPelajaran' => MataPelajaranResource::collection($data),
+            'queryParams' => request()->query() ?: null,
+            'jurusan' => JurusanResource::collection($jurusan),
         ]);
     }
 
@@ -33,13 +49,15 @@ class MataPelajaranController extends Controller
         $request->validate([
             'kode_mata_pelajaran' => 'required',
             'nama_mata_pelajaran' => 'required',
-            'jurusan_id' => 'required',
+            'jurusan_id' => 'nullable',
+            'kkm' => 'nullable',
         ]);
 
         MataPelajaran::create([
             'kode_mata_pelajaran' => $request->kode_mata_pelajaran,
             'nama_mata_pelajaran' => $request->nama_mata_pelajaran,
             'jurusan_id' => $request->jurusan_id,
+            'kkm' => $request->kkm,
         ]);
 
         return to_route('staff.mapel.index');
@@ -61,7 +79,8 @@ class MataPelajaranController extends Controller
         $data =   $request->validate([
             'kode_mata_pelajaran' => 'required',
             'nama_mata_pelajaran' => 'required',
-            'jurusan_id' => 'required',
+            'jurusan_id' => 'nullable',
+            'kkm' => 'required',
         ]);
 
         $mapel = MataPelajaran::findOrFail($id);

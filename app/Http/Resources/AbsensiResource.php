@@ -17,7 +17,7 @@ class AbsensiResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'siswa' => new KelasResource($this->whenLoaded('siswa')),
+            'siswa' => new SiswaResource($this->whenLoaded('siswa')),
             'status_kehadiran' => $this->status_kehadiran,
             'keterangan' => $this->keterangan,
             'tanggal' => (new Carbon($this->tanggal))->format('Y-m-d'),

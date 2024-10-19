@@ -20,6 +20,7 @@ class MataPelajaranResource extends JsonResource
             'kode_mata_pelajaran' => $this->kode_mata_pelajaran,
             'nama_mata_pelajaran' => $this->nama_mata_pelajaran,
             'jurusan' => new JurusanResource($this->whenLoaded('jurusan')),
+            'kkm' => $this->kkm,
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d'),
         ];

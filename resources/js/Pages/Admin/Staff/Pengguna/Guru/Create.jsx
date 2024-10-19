@@ -41,6 +41,13 @@ const CreateGuru = ({ auth, jurusan }) => {
                     });
                 }
             },
+            onSuccess: () => {
+                toast({
+                    variant: "success",
+                    title: "Success!",
+                    description: "Create Guru successfully.",
+                });
+            }
         });
     };
 
@@ -73,6 +80,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Email"
                                     errorMessage={errors.email}
+                                    notEmpty
                                 />
                                 <TextInput
                                     id="nama_lengkap"
@@ -84,6 +92,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Nama Lengkap"
                                     errorMessage={errors.nama_lengkap}
+                                    notEmpty
                                 />
                                 <TextInput
                                     id="bidang_studi"
@@ -95,6 +104,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Bidang Studi"
                                     errorMessage={errors.bidang_studi}
+                                    notEmpty
                                 />
                                 <TextInput
                                     id="telepon"
@@ -106,6 +116,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Telepon"
                                     errorMessage={errors.telepon}
+                                    notEmpty
                                 />
                                 <SelectInput
                                     name="jurusan_id"
@@ -115,6 +126,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Jurusan"
                                     errorMessage={errors.jurusan_id}
+                                    notEmpty
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Pilih jurusan" />
@@ -143,6 +155,7 @@ const CreateGuru = ({ auth, jurusan }) => {
                                     }
                                     label="Alamat"
                                     errorMessage={errors.alamat}
+                                    notEmpty
                                 />
                             </div>
 
