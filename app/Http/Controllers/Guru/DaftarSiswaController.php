@@ -21,9 +21,9 @@ class DaftarSiswaController extends Controller
     {
         $jurusanId = request('jurusan_id');
         $kelasId = request('kelas_id');
-        $userId = Auth::user()->id;
+        $userId = Guru::findOrFail(Auth::user()->id);
 
-        $guruId = Guru::where('user_id', $userId)->value('id');
+        $guruId = Guru::where('user_id', $userId->id)->value('id');
 
         $kelasIds = KelasMataPelajaran::where('guru_id', $guruId)->pluck('kelas_id');
 

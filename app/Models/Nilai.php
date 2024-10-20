@@ -13,4 +13,10 @@ class Nilai extends Model
         'penilaian_id',
         'nilai',
     ];
+
+     // Relasi ke model Penilaian
+     public function penilaian()
+     {
+         return $this->belongsTo(Penilaian::class);
+     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Guru;
+use App\Models\JenisPenilaian;
 use App\Models\MataPelajaran;
 use App\Models\Siswa;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Siswa::class, 'siswa_id');
             $table->foreignIdFor(MataPelajaran::class, 'kelas_mata_pelajaran_id');
-            $table->string('jenis_penilaian');
+            $table->foreignIdFor(JenisPenilaian::class, 'jenis_penilaian_id');
             $table->date('tanggal_penilaian');
             $table->timestamps();
         });

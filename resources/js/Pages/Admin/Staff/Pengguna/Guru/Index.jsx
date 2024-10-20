@@ -16,8 +16,6 @@ import { columns } from "./Column";
 import { Card, CardContent } from "@/Components/ui/card";
 import { BookOpen, Calendar, Search, Users } from "lucide-react";
 
-
-
 const Index = ({ auth, guru, jurusan, queryParams = null }) => {
     queryParams = queryParams || {};
     const searchFieldChanged = (name, value) => {
@@ -43,7 +41,9 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                             <Users className="h-6 w-6" />
                             Guru List
                         </h1>
-                        <p className="text-blue-100">Manage and view all teacher data</p>
+                        <p className="text-blue-100">
+                            Manage and view all teacher data
+                        </p>
                     </div>
                     <Link href={route("staff.guru.create")}>
                         <Button className="bg-white text-blue-600 hover:bg-blue-50">
@@ -64,7 +64,9 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                                 <Select
                                     name="jurusan_id"
                                     value={queryParams?.jurusan_id}
-                                    onValueChange={(value) => searchFieldChanged("jurusan_id", value)}
+                                    onValueChange={(value) =>
+                                        searchFieldChanged("jurusan_id", value)
+                                    }
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Filter jurusan" />
@@ -72,7 +74,10 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                                     <SelectContent>
                                         <SelectGroup>
                                             {jurusan.data.map((item) => (
-                                                <SelectItem key={item.id} value={item.id.toString()}>
+                                                <SelectItem
+                                                    key={item.id}
+                                                    value={item.id.toString()}
+                                                >
                                                     {item.nama_jurusan}
                                                 </SelectItem>
                                             ))}
@@ -89,15 +94,21 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                                 <Select
                                     name="status"
                                     value={queryParams?.status}
-                                    onValueChange={(value) => searchFieldChanged("status", value)}
+                                    onValueChange={(value) =>
+                                        searchFieldChanged("status", value)
+                                    }
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Filter status" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectItem value="1">Active</SelectItem>
-                                            <SelectItem value="0">Inactive</SelectItem>
+                                            <SelectItem value="1">
+                                                Active
+                                            </SelectItem>
+                                            <SelectItem value="0">
+                                                Inactive
+                                            </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -111,7 +122,12 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                                 <Input
                                     type="date"
                                     value={queryParams?.joinDate}
-                                    onChange={(e) => searchFieldChanged("joinDate", e.target.value)}
+                                    onChange={(e) =>
+                                        searchFieldChanged(
+                                            "joinDate",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
 
@@ -125,9 +141,17 @@ const Index = ({ auth, guru, jurusan, queryParams = null }) => {
                                         type="text"
                                         value={queryParams?.namaLengkap}
                                         placeholder="Filter Nama Lengkap"
-                                        onChange={(e) => searchFieldChanged("namaLengkap", e.target.value)}
+                                        onChange={(e) =>
+                                            searchFieldChanged(
+                                                "namaLengkap",
+                                                e.target.value
+                                            )
+                                        }
                                     />
-                                    <Button variant="outline" onClick={handleReset}>
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleReset}
+                                    >
                                         Reset
                                     </Button>
                                 </div>

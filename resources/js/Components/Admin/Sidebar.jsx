@@ -53,6 +53,11 @@ const MenuStaff = [
                 label: "Penugasan Guru",
                 path: route("staff.penugasan.index"),
             },
+            {
+                id: "staff.jenis-penilaian.index",
+                label: "Kategori Nilai",
+                path: route("staff.jenis-penilaian.index"),
+            },
         ],
     },
     {
@@ -133,26 +138,10 @@ const MenuGuru = [
         icon: <Calendar className="w-5" />,
     },
     {
-        id: "penilaian-siswa",
+        id: "guru.penilaian.index",
         label: "Penilaian",
+        path: route("guru.penilaian.index"),
         icon: <Award className="w-5" />,
-        children: [
-            {
-                id: "staff.pendaftaran.list",
-                label: "Nilai Harian",
-                path: route("staff.pendaftaran.list"),
-            },
-            {
-                id: "staff.pembayaran.list",
-                label: "Nilai UTS",
-                path: route("staff.pembayaran.list"),
-            },
-            {
-                id: "staff.pembayaran.list",
-                label: "Nilai UAS",
-                path: route("staff.pembayaran.list"),
-            },
-        ],
     },
     {
         id: "raport",

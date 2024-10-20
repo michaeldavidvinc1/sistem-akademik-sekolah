@@ -4,9 +4,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Guru\AbsensiController;
 use App\Http\Controllers\Guru\DaftarSiswaController;
 use App\Http\Controllers\Guru\GuruDashboardController;
+use App\Http\Controllers\Guru\PenilaianController;
+use App\Http\Controllers\Guru\RekapNilaiController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
+use App\Http\Controllers\Staff\JenisPenilaianController;
 use App\Http\Controllers\Staff\JurusanController;
 use App\Http\Controllers\Staff\KelasController;
 use App\Http\Controllers\Staff\MataPelajaranController;
@@ -117,6 +120,16 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
         'destroy' => 'staff.penugasan.destroy',
     ]);
 
+    Route::resource('/jenis-penilaian', JenisPenilaianController::class)->names([
+        'index' => 'staff.jenis-penilaian.index',
+        'create' => 'staff.jenis-penilaian.create',
+        'store' => 'staff.jenis-penilaian.store',
+        'show' => 'staff.jenis-penilaian.show',
+        'edit' => 'staff.jenis-penilaian.edit',
+        'update' => 'staff.jenis-penilaian.update',
+        'destroy' => 'staff.jenis-penilaian.destroy',
+    ]);
+
     // Pendaftaran Siswa Baru Route
     Route::get('/pendaftaran-siswa-list', [StaffPendaftaranSiswaController::class, 'index'])->name('staff.pendaftaran.list');
     Route::get('/pendaftaran-siswa-list/{id}', [StaffPendaftaranSiswaController::class, 'edit'])->name('staff.pendaftaran.edit');
@@ -138,4 +151,11 @@ Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
     // Absensi Route
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('guru.absensi.form');
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('guru.absensi.store');
+
+    // Penilaian Route
+    Route::get('/input-nilai', [PenilaianController::class, 'index'])->name('guru.penilaian.index');
+    Route::post('/input-nilai', [PenilaianController::class, 'store'])->name('guru.penilaian.store');
+
+    // Rekap Nilai Akhir Route
+    Route::get("/rekap-nilai", [RekapNilaiController::class, 'index'])->name('guru.rekap.nilai');
 });

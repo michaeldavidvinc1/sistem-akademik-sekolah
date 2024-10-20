@@ -8,7 +8,14 @@ import { Card, CardContent } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { BookOpen, Search } from "lucide-react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
 
 const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
     queryParams = queryParams || {};
@@ -34,7 +41,9 @@ const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
                             <BookOpen className="h-6 w-6" />
                             Mata Pelajaran List
                         </h1>
-                        <p className="text-blue-100">Manage and view all mata pelajaran data</p>
+                        <p className="text-blue-100">
+                            Manage and view all mata pelajaran data
+                        </p>
                     </div>
                     <Link href={route("staff.mapel.create")}>
                         <Button className="bg-white text-blue-600 hover:bg-blue-50">
@@ -55,7 +64,9 @@ const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
                                 <Select
                                     name="jurusan_id"
                                     value={queryParams?.jurusan_id}
-                                    onValueChange={(value) => searchFieldChanged("jurusan_id", value)}
+                                    onValueChange={(value) =>
+                                        searchFieldChanged("jurusan_id", value)
+                                    }
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Filter jurusan" />
@@ -63,7 +74,10 @@ const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
                                     <SelectContent>
                                         <SelectGroup>
                                             {jurusan.data.map((item) => (
-                                                <SelectItem key={item.id} value={item.id.toString()}>
+                                                <SelectItem
+                                                    key={item.id}
+                                                    value={item.id.toString()}
+                                                >
                                                     {item.nama_jurusan}
                                                 </SelectItem>
                                             ))}
@@ -81,9 +95,17 @@ const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
                                         type="text"
                                         value={queryParams?.namaMapel}
                                         placeholder="Filter Nama Mata Pelajaran"
-                                        onBlur={(e) => searchFieldChanged("namaMapel", e.target.value)}
+                                        onBlur={(e) =>
+                                            searchFieldChanged(
+                                                "namaMapel",
+                                                e.target.value
+                                            )
+                                        }
                                     />
-                                    <Button variant="outline" onClick={handleReset}>
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleReset}
+                                    >
                                         Reset
                                     </Button>
                                 </div>
@@ -95,7 +117,10 @@ const Index = ({ auth, mataPelajaran, jurusan, queryParams = null }) => {
                 {/* Data Table */}
                 <Card>
                     <CardContent className="pt-6">
-                        <Datatable columns={columns} data={mataPelajaran.data} />
+                        <Datatable
+                            columns={columns}
+                            data={mataPelajaran.data}
+                        />
                     </CardContent>
                 </Card>
             </div>
