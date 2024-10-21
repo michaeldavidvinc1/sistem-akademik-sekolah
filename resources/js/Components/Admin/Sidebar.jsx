@@ -149,9 +149,9 @@ const MenuGuru = [
         icon: <GraduationCap className="w-5" />,
         children: [
             {
-                id: "staff.pendaftaran.list",
+                id: "guru.rekap.nilai",
                 label: "Rekap Nilai Akhir",
-                path: route("staff.pendaftaran.list"),
+                path: route("guru.rekap.nilai"),
             },
             {
                 id: "staff.pembayaran.list",

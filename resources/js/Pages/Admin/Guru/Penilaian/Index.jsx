@@ -1,7 +1,6 @@
-import StatPenilaian from "@/Components/Admin/Guru/StatPenilaian";
 import DashboardLayout from "@/Components/Admin/Layout";
 import { Button } from "@/Components/ui/button";
-import { Card, CardContent } from "@/Components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import {
     Select,
@@ -27,10 +26,12 @@ import {
     Blinds,
     BookOpen,
     ChartColumnStacked,
+    GraduationCap,
     RotateCcw,
     Save,
     ScrollText,
     TrendingUp,
+    User,
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -139,11 +140,111 @@ const Index = ({
     return (
         <DashboardLayout auth={auth}>
             <div className="space-y-6">
-                <StatPenilaian data={dataPenilaian} kkm={getMapelKKM(queryParams.mata_pelajaran_id)} />
-                {/* Filter Section */}
+                {queryParams.kelas_id &&
+                    queryParams.mata_pelajaran_id &&
+                    queryParams.jenis_penilaian_id && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            <Card className="bg-white">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="p-2 bg-blue-50 rounded-lg">
+                                            <User className="h-5 w-5 text-blue-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-gray-500">
+                                                Guru Pengajar
+                                            </p>
+                                            <p className="text-base font-semibold">
+                                                {auth.user.name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-white">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="p-2 bg-purple-50 rounded-lg">
+                                            <GraduationCap className="h-5 w-5 text-purple-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-gray-500">
+                                                Kelas
+                                            </p>
+                                            <p className="text-base font-semibold">
+                                                {getNamaKelas(
+                                                    queryParams.kelas_id
+                                                )}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-white">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="p-2 bg-green-50 rounded-lg">
+                                            <BookOpen className="h-5 w-5 text-green-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-gray-500">
+                                                Mata Pelajaran
+                                            </p>
+                                            <div className="space-y-1">
+                                                <p className="text-base font-semibold">
+                                                    {
+                                                        mapel.data.find(
+                                                            (m) =>
+                                                                m.id.toString() ===
+                                                                queryParams.mata_pelajaran_id
+                                                        )?.nama_mata_pelajaran
+                                                    }
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    KKM:{" "}
+                                                    {getMapelKKM(
+                                                        queryParams.mata_pelajaran_id
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-white">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="p-2 bg-amber-50 rounded-lg">
+                                            <ChartColumnStacked className="h-5 w-5 text-amber-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-gray-500">
+                                                Jenis Penilaian
+                                            </p>
+                                            <p className="text-base font-semibold">
+                                                {
+                                                    jenisPenilaian.data.find(
+                                                        (jp) =>
+                                                            jp.id.toString() ===
+                                                            queryParams.jenis_penilaian_id
+                                                    )?.deskripsi
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                 <Card>
-                    <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <CardHeader>
+                        <CardTitle>Input Nilai Siswa</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div className="space-y-2 lg:col-start-1">
                                 <label className="text-sm font-medium flex items-center gap-2">
                                     <ScrollText className="h-4 w-4 text-gray-500" />
@@ -226,15 +327,20 @@ const Index = ({
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                {jenisPenilaian.data.map((item) => (
-                                                    <SelectItem
-                                                        key={item.id}
-                                                        value={item.id.toString()}
-                                                    >
-                                                        {item.deskripsi} (
-                                                        {item.kode_jenis_penilaian})
-                                                    </SelectItem>
-                                                ))}
+                                                {jenisPenilaian.data.map(
+                                                    (item) => (
+                                                        <SelectItem
+                                                            key={item.id}
+                                                            value={item.id.toString()}
+                                                        >
+                                                            {item.deskripsi} (
+                                                            {
+                                                                item.kode_jenis_penilaian
+                                                            }
+                                                            )
+                                                        </SelectItem>
+                                                    )
+                                                )}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -251,72 +357,71 @@ const Index = ({
                                 </div>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
-                {/* Table Section */}
-                <Card>
-                    <CardContent className="pt-6">
+
                         {queryParams.kelas_id &&
                         queryParams.mata_pelajaran_id &&
                         queryParams.jenis_penilaian_id ? (
                             <>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="bg-gray-50 hover:bg-gray-50">
-                                            <TableHead className="w-16 text-center">
-                                                No
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Nama Lengkap
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Kelas
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Nilai
-                                            </TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {dataPenilaian?.map((item, index) => (
-                                            <TableRow key={item.siswa.id}>
-                                                <TableCell className="text-center">
-                                                    {index + 1}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {item.siswa.nama}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {getNamaKelas(
-                                                        queryParams.kelas_id
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="w-32">
-                                                    <Input
-                                                        type="number"
-                                                        min="0"
-                                                        max="100"
-                                                        value={
-                                                            nilaiInputs[
-                                                                item.siswa.id
-                                                            ] ||
-                                                            item.nilai ||
-                                                            ""
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleNilaiChange(
-                                                                item.siswa.id,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder="0-100"
-                                                    />
-                                                </TableCell>
+                                <div className="border rounded-lg overflow-hidden">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="bg-gray-50">
+                                                <TableHead className="w-16">
+                                                    No
+                                                </TableHead>
+                                                <TableHead>
+                                                    Nama Siswa
+                                                </TableHead>
+                                                <TableHead className="w-32 text-center">
+                                                    Nilai (0-100)
+                                                </TableHead>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                                <div className="mt-4 flex justify-end">
+                                        </TableHeader>
+                                        <TableBody>
+                                            {dataPenilaian?.map(
+                                                (item, index) => (
+                                                    <TableRow
+                                                        key={item.siswa.id}
+                                                    >
+                                                        <TableCell>
+                                                            {index + 1}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {item.siswa.nama}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Input
+                                                                type="number"
+                                                                min="0"
+                                                                max="100"
+                                                                value={
+                                                                    nilaiInputs[
+                                                                        item
+                                                                            .siswa
+                                                                            .id
+                                                                    ] ||
+                                                                    item.nilai ||
+                                                                    ""
+                                                                }
+                                                                onChange={(e) =>
+                                                                    handleNilaiChange(
+                                                                        item
+                                                                            .siswa
+                                                                            .id,
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                className="text-center"
+                                                            />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                <div className="flex justify-end gap-3 mt-4">
                                     <Button
                                         onClick={handleSubmit}
                                         disabled={isSubmitting}
@@ -330,7 +435,7 @@ const Index = ({
                                 </div>
                             </>
                         ) : (
-                            <div className="py-8 text-center text-gray-500">
+                            <div className="text-center py-8 text-gray-500">
                                 Pilih kelas, mata pelajaran, dan jenis penilaian
                                 untuk menampilkan form input nilai
                             </div>

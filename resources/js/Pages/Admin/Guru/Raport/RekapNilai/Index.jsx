@@ -1,8 +1,6 @@
-import StatPenilaian from "@/Components/Admin/Guru/StatPenilaian";
 import DashboardLayout from "@/Components/Admin/Layout";
 import { Button } from "@/Components/ui/button";
 import { Card, CardContent } from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
 import {
     Select,
     SelectContent,
@@ -19,18 +17,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { useToast } from "@/hooks/use-toast";
 import { router } from "@inertiajs/react";
 import {
-    AlertTriangle,
-    Award,
-    Blinds,
-    BookOpen,
     ChartColumnStacked,
+    GraduationCap,
     RotateCcw,
-    Save,
     ScrollText,
-    TrendingUp,
+    Search,
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -38,13 +31,11 @@ const Index = ({
     auth,
     jenisPenilaian,
     kelas,
-    mapel,
     queryParams = null,
     dataPenilaian,
+    nilaiSiswa
 }) => {
-    const { toast } = useToast();
-    const [nilaiInputs, setNilaiInputs] = useState({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(true);
     queryParams = queryParams || {};
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -52,177 +43,91 @@ const Index = ({
         } else {
             delete queryParams[name];
         }
-        router.get(route("guru.penilaian.index"), queryParams);
-    };
-
-    const handleNilaiChange = (siswaId, value) => {
-        setNilaiInputs((prev) => ({
-            ...prev,
-            [siswaId]: value,
-        }));
-    };
-
-    const handleSubmit = async () => {
-        if (
-            !queryParams.kelas_id ||
-            !queryParams.mata_pelajaran_id ||
-            !queryParams.jenis_penilaian_id
-        ) {
-            alert(
-                "Pilih kelas, mata pelajaran, dan jenis penilaian terlebih dahulu"
-            );
-            return;
-        }
-
-        setIsSubmitting(true);
-
-        try {
-            await router.post(
-                route("guru.penilaian.store"),
-                {
-                    kelas_id: queryParams.kelas_id,
-                    mata_pelajaran_id: queryParams.mata_pelajaran_id,
-                    jenis_penilaian_id: queryParams.jenis_penilaian_id,
-                    nilai_siswa: Object.entries(nilaiInputs).map(
-                        ([siswaId, nilai]) => ({
-                            siswa_id: siswaId,
-                            nilai: nilai,
-                        })
-                    ),
-                    tanggal_penilaian: new Date().toISOString().split("T")[0],
-                },
-                {
-                    onError: () => {
-                        toast({
-                            variant: "destructive",
-                            title: "Uh oh! Something went wrong.",
-                            description: "Nilai siswa required",
-                        });
-                    },
-                    onSuccess: () => {
-                        toast({
-                            variant: "success",
-                            title: "Success!",
-                            description: "Nilai siswa berhasil di input",
-                        });
-                    },
-                }
-            );
-        } catch (error) {
-            console.error("Error submitting nilai:", error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    const getNamaKelas = (kelasId) => {
-        const kelasData = kelas.data.find(
-            (k) => k.id.toString() === kelasId?.toString()
-        );
-        return kelasData ? kelasData.nama_kelas : "-";
-    };
-
-    const getMapelKKM = (mapelId) => {
-        const mapelData = mapel.data.find(
-            (m) => m.id.toString() === mapelId?.toString()
-        );
-        return mapelData ? mapelData.kkm : "0";
+        router.get(route("guru.rekap.nilai"), queryParams);
     };
 
     const handleResetFilters = () => {
-        // Reset state lokal jika ada
-        setNilaiInputs({});
-        // Reset query params dan reload halaman
-        router.get(route("guru.penilaian.index"), {});
+        router.get(route("guru.rekap.nilai"), {});
     };
 
+    console.log(nilaiSiswa)
     return (
         <DashboardLayout auth={auth}>
-            <div className="space-y-6">
-                <StatPenilaian data={dataPenilaian} kkm={getMapelKKM(queryParams.mata_pelajaran_id)} />
-                {/* Filter Section */}
-                <Card>
-                    <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div className="space-y-2 lg:col-start-1">
-                                <label className="text-sm font-medium flex items-center gap-2">
-                                    <ScrollText className="h-4 w-4 text-gray-500" />
-                                    Kelas
-                                </label>
-                                <Select
-                                    name="kelas_id"
-                                    value={queryParams?.kelas_id}
-                                    onValueChange={(value) =>
-                                        searchFieldChanged("kelas_id", value)
-                                    }
+            <div className="">
+                {/* Modern Header Section */}
+                <div className="bg-white border-b">
+                    <div className="px-6 py-4">
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-2xl font-bold text-gray-800">Data Nilai Siswa</h1>
+                            <Button
+                                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                                variant="ghost"
+                                className="text-gray-600 hover:text-gray-800"
+                            >
+                                <Search className="h-5 w-5 mr-2" />
+                                Filter Data
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Floating Filter Panel */}
+                <div className={`transition-all duration-300 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    <div className="max-w-4xl mx-auto px-4 py-6">
+                        <div className="bg-white rounded-xl shadow-sm border p-6 backdrop-blur-sm bg-opacity-90">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-semibold text-gray-700">Filter Pencarian</h2>
+                                <Button
+                                    onClick={handleResetFilters}
+                                    variant="ghost"
+                                    className="text-gray-500 hover:text-red-600 transition-colors"
                                 >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Filter kelas" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {kelas.data.map((item) => (
-                                                <SelectItem
-                                                    key={item.id}
-                                                    value={item.id.toString()}
-                                                >
-                                                    {item.nama_kelas}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
+                                    <RotateCcw className="h-4 w-4 mr-2" />
+                                    Reset Filter
+                                </Button>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium flex items-center gap-2">
-                                    <BookOpen className="h-4 w-4 text-gray-500" />
-                                    Mata Pelajaran
-                                </label>
-                                <Select
-                                    name="mata_pelajaran_id"
-                                    value={queryParams?.mata_pelajaran_id}
-                                    onValueChange={(value) =>
-                                        searchFieldChanged(
-                                            "mata_pelajaran_id",
-                                            value
-                                        )
-                                    }
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Filter mata pelajaran" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {mapel.data.map((item) => (
-                                                <SelectItem
-                                                    key={item.id}
-                                                    value={item.id.toString()}
-                                                >
-                                                    {item.nama_mata_pelajaran}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium flex items-center gap-2">
-                                    <ChartColumnStacked className="h-4 w-4 text-gray-500" />
-                                    Kategori Nilai
-                                </label>
-                                <div className="flex gap-2">
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center text-sm font-medium text-gray-700">
+                                        <ScrollText className="h-4 w-4 mr-2 text-blue-500" />
+                                        Pilih Kelas
+                                    </label>
+                                    <Select
+                                        name="kelas_id"
+                                        value={queryParams?.kelas_id}
+                                        onValueChange={(value) => searchFieldChanged("kelas_id", value)}
+                                    >
+                                        <SelectTrigger className="w-full bg-gray-50 border-0 hover:bg-gray-100 transition-colors">
+                                            <SelectValue placeholder="Pilih Kelas" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {kelas.data.map((item) => (
+                                                    <SelectItem
+                                                        key={item.id}
+                                                        value={item.id.toString()}
+                                                    >
+                                                        {item.nama_kelas}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center text-sm font-medium text-gray-700">
+                                        <ChartColumnStacked className="h-4 w-4 mr-2 text-purple-500" />
+                                        Kategori Nilai
+                                    </label>
                                     <Select
                                         name="jenis_penilaian_id"
                                         value={queryParams?.jenis_penilaian_id}
-                                        onValueChange={(value) =>
-                                            searchFieldChanged(
-                                                "jenis_penilaian_id",
-                                                value
-                                            )
-                                        }
+                                        onValueChange={(value) => searchFieldChanged("jenis_penilaian_id", value)}
                                     >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Filter kategori nilai" />
+                                        <SelectTrigger className="w-full bg-gray-50 border-0 hover:bg-gray-100 transition-colors">
+                                            <SelectValue placeholder="Pilih Kategori" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
@@ -231,112 +136,55 @@ const Index = ({
                                                         key={item.id}
                                                         value={item.id.toString()}
                                                     >
-                                                        {item.deskripsi} (
-                                                        {item.kode_jenis_penilaian})
+                                                        {item.deskripsi} ({item.kode_jenis_penilaian})
                                                     </SelectItem>
                                                 ))}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
-                                    <div className="flex justify-end">
-                                        <Button
-                                            onClick={handleResetFilters}
-                                            variant="outline"
-                                            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-gray-200"
-                                        >
-                                            <RotateCcw className="h-4 w-4" />
-                                            Reset Filter
-                                        </Button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
-                {/* Table Section */}
-                <Card>
-                    <CardContent className="pt-6">
-                        {queryParams.kelas_id &&
-                        queryParams.mata_pelajaran_id &&
-                        queryParams.jenis_penilaian_id ? (
-                            <>
+                    </div>
+                </div>
+
+                {/* Results Section */}
+                <div className="max-w-7xl mx-auto px-4 py-6">
+                    {queryParams.kelas_id && queryParams.jenis_penilaian_id ? (
+                        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow className="bg-gray-50 hover:bg-gray-50">
-                                            <TableHead className="w-16 text-center">
-                                                No
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Nama Lengkap
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Kelas
-                                            </TableHead>
-                                            <TableHead className="font-semibold">
-                                                Nilai
-                                            </TableHead>
+                                        <TableRow className="bg-gray-50">
+                                            <TableHead className="w-16 text-center font-semibold">No</TableHead>
+                                            <TableHead className="font-semibold">Nama Lengkap</TableHead>
+                                            <TableHead className="font-semibold">Kelas</TableHead>
+                                            <TableHead className="font-semibold text-right">Nilai</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {dataPenilaian?.map((item, index) => (
-                                            <TableRow key={item.siswa.id}>
-                                                <TableCell className="text-center">
-                                                    {index + 1}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {item.siswa.nama}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {getNamaKelas(
-                                                        queryParams.kelas_id
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="w-32">
-                                                    <Input
-                                                        type="number"
-                                                        min="0"
-                                                        max="100"
-                                                        value={
-                                                            nilaiInputs[
-                                                                item.siswa.id
-                                                            ] ||
-                                                            item.nilai ||
-                                                            ""
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleNilaiChange(
-                                                                item.siswa.id,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder="0-100"
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {/* Example rows - replace with your data */}
+                                        <TableRow>
+                                            <TableCell className="text-center">1</TableCell>
+                                            <TableCell>John Doe</TableCell>
+                                            <TableCell>XA</TableCell>
+                                            <TableCell className="text-right font-medium">85</TableCell>
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
-                                <div className="mt-4 flex justify-end">
-                                    <Button
-                                        onClick={handleSubmit}
-                                        disabled={isSubmitting}
-                                        className="flex items-center gap-2"
-                                    >
-                                        <Save className="h-4 w-4" />
-                                        {isSubmitting
-                                            ? "Menyimpan..."
-                                            : "Simpan Nilai"}
-                                    </Button>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="py-8 text-center text-gray-500">
-                                Pilih kelas, mata pelajaran, dan jenis penilaian
-                                untuk menampilkan form input nilai
                             </div>
-                        )}
-                    </CardContent>
-                </Card>
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                                <GraduationCap className="h-8 w-8 text-gray-400" />
+                            </div>
+                            <p className="text-gray-500 max-w-sm mx-auto">
+                                Gunakan filter di atas untuk menampilkan data nilai siswa
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
         </DashboardLayout>
     );
