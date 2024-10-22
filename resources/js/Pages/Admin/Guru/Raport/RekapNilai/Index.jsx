@@ -50,7 +50,6 @@ const Index = ({
         router.get(route("guru.rekap.nilai"), {});
     };
 
-    console.log(nilaiSiswa)
     return (
         <DashboardLayout auth={auth}>
             <div className="">
