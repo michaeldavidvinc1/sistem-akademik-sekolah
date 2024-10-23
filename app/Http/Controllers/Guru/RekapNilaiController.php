@@ -38,12 +38,6 @@ class RekapNilaiController extends Controller
         $siswaDenganNilai = null;
 
         if ($kelasId && $kategoriNilaiId) {
-            // Dapatkan semua mata pelajaran untuk kelas tersebut
-            $mataPelajarans = MataPelajaran::select('nama_mata_pelajaran')
-                ->join('kelas_mata_pelajarans', 'mata_pelajarans.id', '=', 'kelas_mata_pelajarans.mata_pelajaran_id')
-                ->where('kelas_mata_pelajarans.kelas_id', $kelasId)
-                ->distinct()
-                ->get();
 
             // Query utama
             $nilaiSiswa = Siswa::select([
@@ -64,24 +58,48 @@ class RekapNilaiController extends Controller
                 ->groupBy('siswas.nama_lengkap')
                 ->get();
 
-            // Transform hasil ke format yang diinginkan
-            $siswaDenganNilai = $nilaiSiswa->map(function ($item) {
-                $nilaiArray = [];
-                $pairs = explode(',', $item->nilai_mata_pelajaran);
-
-                foreach ($pairs as $pair) {
-                    if (preg_match('/\"(.+)\"\: (.+)/', $pair, $matches)) {
-                        $mataPelajaran = $matches[1];
-                        $nilai = $matches[2] === 'null' ? null : (float)$matches[2];
-                        $nilaiArray[$mataPelajaran] = $nilai;
+                $siswaDenganNilai = $nilaiSiswa->map(function ($item) {
+                    $nilaiArray = [];
+                    $totalNilai = 0;
+                    $jumlahMataPelajaran = 0;
+                    $pairs = explode(',', $item->nilai_mata_pelajaran);
+                
+                    foreach ($pairs as $pair) {
+                        if (preg_match('/\"(.+)\"\: (.+)/', $pair, $matches)) {
+                            $mataPelajaran = $matches[1];
+                            $nilai = $matches[2] === 'null' ? null : (float)$matches[2];
+                            
+                            if ($nilai !== null) {
+                                $totalNilai += $nilai;
+                                $jumlahMataPelajaran++;
+                            }
+                            
+                            $nilaiArray[$mataPelajaran] = $nilai;
+                        }
                     }
-                }
-
-                return [
-                    'nama_siswa' => $item->nama_siswa,
-                    'nilai' => $nilaiArray
-                ];
-            });
+                
+                    // Hitung rata-rata nilai (cek jika ada mata pelajaran yang memiliki nilai)
+                    $rataRataNilai = $jumlahMataPelajaran > 0 ? $totalNilai / $jumlahMataPelajaran : null;
+                
+                    return [
+                        'nama_siswa' => $item->nama_siswa,
+                        'nilai' => $nilaiArray,
+                        'rata_rata' => $rataRataNilai // tambahkan rata-rata ke hasil
+                    ];
+                });
+                
+                // Sort berdasarkan nilai rata-rata tertinggi
+                $siswaDenganNilai = $siswaDenganNilai->sortByDesc('rata_rata')->values();
+                
+                // Tambahkan ranking berdasarkan urutan rata-rata nilai
+                $siswaDenganNilai = $siswaDenganNilai->map(function ($item, $index) {
+                    return [
+                        'ranking' => $index + 1, // Ranking dimulai dari 1
+                        'nama_siswa' => $item['nama_siswa'],
+                        'nilai' => $item['nilai'],
+                        'rata_rata' => $item['rata_rata']
+                    ];
+                });
         }
 
 

@@ -33,7 +33,7 @@ const Index = ({
     kelas,
     queryParams = null,
     dataPenilaian,
-    nilaiSiswa
+    nilaiSiswa,
 }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(true);
     queryParams = queryParams || {};
@@ -50,6 +50,10 @@ const Index = ({
         router.get(route("guru.rekap.nilai"), {});
     };
 
+    const mataPelajaran = Object.keys(nilaiSiswa?.[0]?.nilai ?? {});
+
+    console.log(nilaiSiswa)
+
     return (
         <DashboardLayout auth={auth}>
             <div className="">
@@ -57,7 +61,9 @@ const Index = ({
                 <div className="bg-white border-b">
                     <div className="px-6 py-4">
                         <div className="flex items-center justify-between">
-                            <h1 className="text-2xl font-bold text-gray-800">Data Nilai Siswa</h1>
+                            <h1 className="text-2xl font-bold text-gray-800">
+                                Rekap Nilai Siswa
+                            </h1>
                             <Button
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                                 variant="ghost"
@@ -71,11 +77,19 @@ const Index = ({
                 </div>
 
                 {/* Floating Filter Panel */}
-                <div className={`transition-all duration-300 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <div
+                    className={`transition-all duration-300 ${
+                        isFilterOpen
+                            ? "opacity-100"
+                            : "opacity-0 pointer-events-none"
+                    }`}
+                >
                     <div className="max-w-4xl mx-auto px-4 py-6">
                         <div className="bg-white rounded-xl shadow-sm border p-6 backdrop-blur-sm bg-opacity-90">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-lg font-semibold text-gray-700">Filter Pencarian</h2>
+                                <h2 className="text-lg font-semibold text-gray-700">
+                                    Filter Pencarian
+                                </h2>
                                 <Button
                                     onClick={handleResetFilters}
                                     variant="ghost"
@@ -95,7 +109,12 @@ const Index = ({
                                     <Select
                                         name="kelas_id"
                                         value={queryParams?.kelas_id}
-                                        onValueChange={(value) => searchFieldChanged("kelas_id", value)}
+                                        onValueChange={(value) =>
+                                            searchFieldChanged(
+                                                "kelas_id",
+                                                value
+                                            )
+                                        }
                                     >
                                         <SelectTrigger className="w-full bg-gray-50 border-0 hover:bg-gray-100 transition-colors">
                                             <SelectValue placeholder="Pilih Kelas" />
@@ -123,21 +142,32 @@ const Index = ({
                                     <Select
                                         name="jenis_penilaian_id"
                                         value={queryParams?.jenis_penilaian_id}
-                                        onValueChange={(value) => searchFieldChanged("jenis_penilaian_id", value)}
+                                        onValueChange={(value) =>
+                                            searchFieldChanged(
+                                                "jenis_penilaian_id",
+                                                value
+                                            )
+                                        }
                                     >
                                         <SelectTrigger className="w-full bg-gray-50 border-0 hover:bg-gray-100 transition-colors">
                                             <SelectValue placeholder="Pilih Kategori" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                {jenisPenilaian.data.map((item) => (
-                                                    <SelectItem
-                                                        key={item.id}
-                                                        value={item.id.toString()}
-                                                    >
-                                                        {item.deskripsi} ({item.kode_jenis_penilaian})
-                                                    </SelectItem>
-                                                ))}
+                                                {jenisPenilaian.data.map(
+                                                    (item) => (
+                                                        <SelectItem
+                                                            key={item.id}
+                                                            value={item.id.toString()}
+                                                        >
+                                                            {item.deskripsi} (
+                                                            {
+                                                                item.kode_jenis_penilaian
+                                                            }
+                                                            )
+                                                        </SelectItem>
+                                                    )
+                                                )}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -155,20 +185,60 @@ const Index = ({
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="bg-gray-50">
-                                            <TableHead className="w-16 text-center font-semibold">No</TableHead>
-                                            <TableHead className="font-semibold">Nama Lengkap</TableHead>
-                                            <TableHead className="font-semibold">Kelas</TableHead>
-                                            <TableHead className="font-semibold text-right">Nilai</TableHead>
+                                            <TableHead className="w-16 text-center font-semibold">
+                                                No
+                                            </TableHead>
+                                            <TableHead className="font-semibold text-center">
+                                                Nama Lengkap
+                                            </TableHead>
+                                            {mataPelajaran.map(
+                                                (item, index) => (
+                                                    <TableHead
+                                                        className="font-semibold text-center"
+                                                        key={index}
+                                                    >
+                                                        {item}
+                                                    </TableHead>
+                                                )
+                                            )}
+                                            <TableHead className="font-semibold text-center">
+                                                Rata - Rata
+                                            </TableHead>
+                                            <TableHead className="font-semibold text-center">
+                                                Ranking
+                                            </TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {/* Example rows - replace with your data */}
-                                        <TableRow>
-                                            <TableCell className="text-center">1</TableCell>
-                                            <TableCell>John Doe</TableCell>
-                                            <TableCell>XA</TableCell>
-                                            <TableCell className="text-right font-medium">85</TableCell>
-                                        </TableRow>
+                                        {nilaiSiswa.map((item, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell className="text-center">
+                                                    {index + 1}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.nama_siswa}
+                                                </TableCell>
+                                                {Object.entries(item.nilai).map(
+                                                    (
+                                                        [mataPelajaran, nilai],
+                                                        idx
+                                                    ) => (
+                                                        <TableCell
+                                                            key={idx}
+                                                            className="text-center"
+                                                        >
+                                                            {nilai}
+                                                        </TableCell>
+                                                    )
+                                                )}
+                                                 <TableCell className="text-center">
+                                                    {item.rata_rata}
+                                                </TableCell>
+                                                 <TableCell className="text-center">
+                                                    {item.ranking}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -179,7 +249,8 @@ const Index = ({
                                 <GraduationCap className="h-8 w-8 text-gray-400" />
                             </div>
                             <p className="text-gray-500 max-w-sm mx-auto">
-                                Gunakan filter di atas untuk menampilkan data nilai siswa
+                                Gunakan filter di atas untuk menampilkan data
+                                nilai siswa
                             </p>
                         </div>
                     )}
