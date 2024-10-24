@@ -158,4 +158,7 @@ Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
 
     // Rekap Nilai Akhir Route
     Route::get("/rekap-nilai", [RekapNilaiController::class, 'index'])->name('guru.rekap.nilai');
+
+    // Cetak Raport Siswa
+    Route::get("/rekap-nilai", [RekapNilaiController::class, 'index'])->name('guru.rekap.nilai');
 });
