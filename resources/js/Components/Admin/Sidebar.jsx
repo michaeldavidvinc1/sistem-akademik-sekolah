@@ -154,9 +154,9 @@ const MenuGuru = [
                 path: route("guru.rekap.nilai"),
             },
             {
-                id: "staff.pembayaran.list",
+                id: "guru.cetak.nilai",
                 label: "Cetak Raport",
-                path: route("staff.pembayaran.list"),
+                path: route("guru.cetak.nilai"),
             },
         ],
     },

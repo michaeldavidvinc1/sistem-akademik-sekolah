@@ -242,7 +242,7 @@ const Index = ({
                     )}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Input Nilai Siswa</CardTitle>
+                        <CardTitle className="text-xl">Input Nilai Siswa</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

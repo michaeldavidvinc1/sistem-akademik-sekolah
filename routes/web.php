@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Guru\AbsensiController;
+use App\Http\Controllers\Guru\CetakRaportController;
 use App\Http\Controllers\Guru\DaftarSiswaController;
 use App\Http\Controllers\Guru\GuruDashboardController;
 use App\Http\Controllers\Guru\PenilaianController;
@@ -160,5 +161,5 @@ Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
     Route::get("/rekap-nilai", [RekapNilaiController::class, 'index'])->name('guru.rekap.nilai');
 
     // Cetak Raport Siswa
-    Route::get("/rekap-nilai", [RekapNilaiController::class, 'index'])->name('guru.rekap.nilai');
+    Route::get("/cetak-nilai", [CetakRaportController::class, 'index'])->name('guru.cetak.nilai');
 });

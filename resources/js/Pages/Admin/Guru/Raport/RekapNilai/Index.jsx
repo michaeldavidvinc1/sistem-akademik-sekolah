@@ -52,8 +52,6 @@ const Index = ({
 
     const mataPelajaran = Object.keys(nilaiSiswa?.[0]?.nilai ?? {});
 
-    console.log(nilaiSiswa)
-
     return (
         <DashboardLayout auth={auth}>
             <div className="">
