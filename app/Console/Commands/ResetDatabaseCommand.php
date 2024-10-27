@@ -33,6 +33,7 @@ class ResetDatabaseCommand extends Command
         $this->call('db:seed', ['--class' => 'TahunAjaranSeeder']);
         $this->call('db:seed', ['--class' => 'MataPelajaranSeeder']);
         $this->call('db:seed', ['--class' => 'KelasMataPelajaranSeeder']);
+        $this->call('db:seed', ['--class' => 'IdentitasSekolahSeeder']);
 
 
         $this->info('Database reset and specific seeders have been run successfully.');

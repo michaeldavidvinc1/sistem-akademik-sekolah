@@ -10,6 +10,7 @@ use App\Http\Controllers\Guru\RekapNilaiController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
+use App\Http\Controllers\Staff\InformasiSekolahController;
 use App\Http\Controllers\Staff\JenisPenilaianController;
 use App\Http\Controllers\Staff\JurusanController;
 use App\Http\Controllers\Staff\KelasController;
@@ -141,6 +142,10 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
 
     // Pembayaran SPP Siswa Route
     Route::get('/pembayaran-spp', [StaffPembayaranSppController::class, 'index'])->name('staff.pembayaran.list');
+    
+    // Informasi Sekolah Route
+    Route::get('/informasi-sekolah', [InformasiSekolahController::class, 'index'])->name('staff.informasi.sekolah');
+    
 });
 
 Route::middleware('IsRole:guru')->prefix('guru')->group(function() {

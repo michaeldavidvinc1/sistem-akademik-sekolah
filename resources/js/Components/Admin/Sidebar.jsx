@@ -110,9 +110,9 @@ const MenuStaff = [
                 path: route("staff.tahun-ajaran.index"),
             },
             {
-                id: "staff.tahun-ajaran.index",
+                id: "staff.informasi.sekolah",
                 label: "Informasi Sekolah",
-                path: route("staff.tahun-ajaran.index"),
+                path: route("staff.informasi.sekolah"),
             },
         ],
     },
