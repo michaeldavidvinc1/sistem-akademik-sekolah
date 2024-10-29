@@ -174,4 +174,6 @@ Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
 
     // Cetak Raport Siswa
     Route::get("/cetak-nilai", [CetakRaportController::class, 'index'])->name('guru.cetak.nilai');
+    Route::get("/cetak-nilai/{siswaId}", [CetakRaportController::class, 'cetak_raport'])->name('guru.cetak.raport');
+
 });

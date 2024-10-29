@@ -7,11 +7,13 @@ use App\Http\Resources\KelasResource;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\KelasMataPelajaran;
+use App\Models\KepalaSekolah;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use PDF;
 
 class CetakRaportController extends Controller
 {
@@ -114,5 +116,11 @@ class CetakRaportController extends Controller
             'kelas' => KelasResource::collection($kelas),
             'siswaDenganNilai' => $siswaDenganNilai
         ]);
+    }
+
+    public function cetak_raport($siswaId){
+        $kepalaSekolah = KepalaSekolah::first();
+        $pdf = PDF::loadView('print.raport', ['kepalaSekolah' => $kepalaSekolah]);
+        return $pdf->download('raport.pdf');
     }
 }

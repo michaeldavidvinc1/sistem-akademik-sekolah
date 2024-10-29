@@ -48,7 +48,10 @@ const Index = ({ auth, kelas, queryParams = null, siswaDenganNilai }) => {
         router.get(route("guru.cetak.nilai"), {});
     };
 
-    console.log(siswaDenganNilai);
+    const handleCetakRaport = (siswaId) => {
+        router.get(route('guru.cetak.raport', siswaId));
+    }
+
     return (
         <DashboardLayout auth={auth}>
             <div className="space-y-6">
@@ -199,7 +202,7 @@ const Index = ({ auth, kelas, queryParams = null, siswaDenganNilai }) => {
                                                                 {item.ranking}
                                                             </TableCell>
                                                             <TableCell className="text-center">
-                                                                <Button size="sm" className="flex items-center gap-2"><Printer className="h-4 w-4" /><span>Cetak</span></Button>
+                                                                <Button size="sm" className="flex items-center gap-2" onClick={() => handleCetakRaport(item.siswa_id)}><Printer className="h-4 w-4" /><span>Cetak</span></Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     )
