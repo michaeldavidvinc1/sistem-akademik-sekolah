@@ -2,7 +2,7 @@ import { CloudUpload, Trash2 } from "lucide-react";
 import React, {useState, useEffect} from "react";
 import InputError from "./InputError";
 
-const UploadImage = ({ value, handleImageChange, errorMessage, preview, setPreview }) => {
+const UploadImage = ({ value, handleImageChange, errorMessage, preview, setPreview, label }) => {
     
     const handleDelete = () => {
         setPreview(null); 
@@ -28,7 +28,7 @@ const UploadImage = ({ value, handleImageChange, errorMessage, preview, setPrevi
             ) : (
                 <label className="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300">
                     <CloudUpload size={36} className="text-gray-400" />
-                    <span className="mt-2 text-sm text-gray-500">Upload Image</span>
+                    <span className="mt-2 text-sm text-gray-500">{label}</span>
                     <input
                         type="file"
                         className="hidden"

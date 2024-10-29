@@ -14,6 +14,7 @@ use App\Http\Controllers\Staff\InformasiSekolahController;
 use App\Http\Controllers\Staff\JenisPenilaianController;
 use App\Http\Controllers\Staff\JurusanController;
 use App\Http\Controllers\Staff\KelasController;
+use App\Http\Controllers\Staff\KepalaSekolahController;
 use App\Http\Controllers\Staff\MataPelajaranController;
 use App\Http\Controllers\Staff\SiswaController;
 use App\Http\Controllers\Staff\StaffController;
@@ -145,6 +146,12 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
     
     // Informasi Sekolah Route
     Route::get('/informasi-sekolah', [InformasiSekolahController::class, 'index'])->name('staff.informasi.sekolah');
+    Route::put('/informasi-sekolah', [InformasiSekolahController::class, 'update'])->name('staff.informasi.update');
+    
+    // Kepala Sekolah Route
+    Route::get('/kepala-sekolah', [KepalaSekolahController::class, 'index'])->name('staff.kepala.sekolah');
+    Route::put('/kepala-sekolah', [KepalaSekolahController::class, 'update'])->name('staff.kepala.update');
+
     
 });
 

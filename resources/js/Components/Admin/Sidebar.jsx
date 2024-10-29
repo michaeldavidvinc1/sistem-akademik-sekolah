@@ -105,6 +105,11 @@ const MenuStaff = [
         icon: <Settings2 className="w-5" />,
         children: [
             {
+                id: "staff.kepala.sekolah",
+                label: "Kepala Sekolah",
+                path: route("staff.kepala.sekolah"),
+            },
+            {
                 id: "staff.tahun-ajaran.index",
                 label: "Tahun Ajaran",
                 path: route("staff.tahun-ajaran.index"),

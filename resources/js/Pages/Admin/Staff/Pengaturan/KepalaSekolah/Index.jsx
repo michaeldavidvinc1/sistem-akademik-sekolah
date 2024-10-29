@@ -3,54 +3,58 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TextInput from "@/Components/Common/TextInput";
 import { useForm } from "@inertiajs/react";
-import {
-    BookOpen,
-    Briefcase,
-    Building,
-    Globe,
-    Mail,
-    MapPin,
-    Phone,
-    School,
-    Upload,
-} from "lucide-react";
+import { BookOpen, Briefcase, Building, Globe, Mail, MapPin, Phone, School, Upload } from "lucide-react";
 import DashboardLayout from "@/Components/Admin/Layout";
 import { Label } from "@/Components/ui/label";
 import UploadImage from "@/Components/Common/UploadImage";
 import { useToast } from "@/hooks/use-toast";
 
-const Index = ({ auth, identitas }) => {
-    const [previewLogo, setPreviewLogo] = useState(identitas.data.logo);
+const Index = ({ auth, kepalaSekolah }) => {
+    const [previewFoto, setPreviewFoto] = useState(kepalaSekolah.data.foto);
+    const [previewTandaTangan, setPreviewTandaTangan] = useState(kepalaSekolah.data.tanda_tangan);
     const { toast } = useToast();
     const { data, setData, errors, post, processing } = useForm({
-        logo: null,
-        nama_sekolah: identitas.data.nama_sekolah,
-        npsn: identitas.data.npsn,
-        nis: identitas.data.nis,
-        alamat: identitas.data.alamat,
-        kode_pos: identitas.data.kode_pos,
-        website: identitas.data.website,
-        email: identitas.data.email,
-        telepon: identitas.data.telepon,
+        foto: null,
+        tanda_tangan: null,
+        nama_lengkap: kepalaSekolah.data.nama_lengkap,
+        nip: kepalaSekolah.data.nip,
+        jenis_kelamin: kepalaSekolah.data.jenis_kelamin,
+        tanggal_lahir: kepalaSekolah.data.tanggal_lahir,
+        tempat_lahir: kepalaSekolah.data.tempat_lahir,
+        alamat: kepalaSekolah.data.alamat,
+        email: kepalaSekolah.data.email,
+        telepon: kepalaSekolah.data.telepon,
         _method: "PUT",
     });
 
-    const handleImageChange = (e) => {
-        setData("logo", e.target.files[0]);
+    const handleFotoChange = (e) => {
+        setData("foto", e.target.files[0]);
+    };
+
+    const handleTandaTanganChange = (e) => {
+        setData("tanda_tangan", e.target.files[0]);
     };
 
     useEffect(() => {
-        if (data.logo) {
-            const objectUrl = URL.createObjectURL(data.logo);
-            setPreviewLogo(objectUrl);
+        if (data.foto) {
+            const objectUrl = URL.createObjectURL(data.foto);
+            setPreviewFoto(objectUrl);
             return () => URL.revokeObjectURL(objectUrl);
         }
-    }, [data.logo]);
+    }, [data.foto]);
+
+    useEffect(() => {
+        if (data.tanda_tangan) {
+            const objectUrl = URL.createObjectURL(data.tanda_tangan);
+            setPreviewTandaTangan(objectUrl);
+            return () => URL.revokeObjectURL(objectUrl);
+        }
+    }, [data.tanda_tangan]);
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("staff.informasi.update"), {
+        post(route("staff.kepala.update"), {
             onError: (errors) => {
                 if (errors.name) {
                     toast({
@@ -64,7 +68,7 @@ const Index = ({ auth, identitas }) => {
                 toast({
                     variant: "success",
                     title: "Success!",
-                    description: "Update Informasi Sekolah successfully.",
+                    description: "Update Kepala Sekolah successfully.",
                 });
             },
         });
@@ -81,87 +85,97 @@ const Index = ({ auth, identitas }) => {
                             </div>
                         </div>
                         <CardTitle className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                            Identitas Sekolah
+                            Identitas Kepala Sekolah
                         </CardTitle>
                         <p className="text-center text-gray-600">
-                            Lengkapi informasi sekolah Anda dengan detail
+                            Lengkapi informasi kepala sekolah Anda dengan detail
                         </p>
                     </CardHeader>
 
                     <CardContent>
                         <form className="space-y-8" onSubmit={submit}>
-                            <div className="flex items-center justify-center">
+                            <div className="flex items-center justify-center space-x-8">
                                 <UploadImage
-                                    value={data.logo}
-                                    handleImageChange={handleImageChange}
-                                    errorMessage={errors.photo}
-                                    preview={previewLogo}
-                                    setPreview={setPreviewLogo}
-                                    label="Upload Logo"
+                                    value={data.foto}
+                                    handleImageChange={handleFotoChange}
+                                    errorMessage={errors.foto}
+                                    preview={previewFoto}
+                                    setPreview={setPreviewFoto}
+                                    label="Upload Foto"
+                                />
+                                <UploadImage
+                                    value={data.tanda_tangan}
+                                    handleImageChange={handleTandaTanganChange}
+                                    errorMessage={errors.tanda_tangan}
+                                    preview={previewTandaTangan}
+                                    setPreview={setPreviewTandaTangan}
+                                    label="Tanda Tangan"
                                 />
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* Field groups with icons */}
                                 <div className="space-y-6">
                                     <div className="relative">
                                         <TextInput
-                                            id="nama_sekolah"
+                                            id="nama_lengkap"
                                             type="text"
-                                            name="nama_sekolah"
-                                            value={data.nama_sekolah}
+                                            name="nama_lengkap"
+                                            value={data.nama_lengkap}
                                             onChange={(e) =>
                                                 setData(
-                                                    "nama_sekolah",
+                                                    "nama_lengkap",
                                                     e.target.value
                                                 )
                                             }
-                                            label="Nama Sekolah"
-                                            errorMessage={errors.nama_sekolah}
+                                            label="Nama Lengkap"
+                                            errorMessage={errors.nama_lengkap}
                                         />
                                     </div>
 
                                     <div className="relative">
                                         <TextInput
-                                            id="npsn"
+                                            id="nip"
                                             type="text"
-                                            name="npsn"
-                                            value={data.npsn}
+                                            name="nip"
+                                            value={data.nip}
                                             onChange={(e) =>
-                                                setData("npsn", e.target.value)
+                                                setData("nip", e.target.value)
                                             }
-                                            label="NPSN"
-                                            errorMessage={errors.npsn}
+                                            label="NIP"
+                                            errorMessage={errors.nip}
                                         />
                                     </div>
 
                                     <div className="relative">
                                         <TextInput
-                                            id="nis"
+                                            id="jenis_kelamin"
                                             type="text"
-                                            name="nis"
-                                            value={data.nis}
-                                            onChange={(e) =>
-                                                setData("nis", e.target.value)
-                                            }
-                                            label="NIS"
-                                            errorMessage={errors.nis}
-                                        />
-                                    </div>
-
-                                    <div className="relative">
-                                        <TextInput
-                                            id="kode_pos"
-                                            type="number"
-                                            name="kode_pos"
-                                            value={data.kode_pos}
+                                            name="jenis_kelamin"
+                                            value={data.jenis_kelamin}
                                             onChange={(e) =>
                                                 setData(
-                                                    "kode_pos",
+                                                    "jenis_kelamin",
                                                     e.target.value
                                                 )
                                             }
-                                            label="Kode Pos"
-                                            errorMessage={errors.kode_pos}
+                                            label="Jenis Kelamin"
+                                            errorMessage={errors.jenis_kelamin}
+                                        />
+                                    </div>
+
+                                    <div className="relative">
+                                        <TextInput
+                                            id="tanggal_lahir"
+                                            type="date"
+                                            name="tanggal_lahir"
+                                            value={data.tanggal_lahir}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "tanggal_lahir",
+                                                    e.target.value
+                                                )
+                                            }
+                                            label="Tanggal Lahir"
+                                            errorMessage={errors.tanggal_lahir}
                                         />
                                     </div>
                                 </div>
@@ -169,35 +183,32 @@ const Index = ({ auth, identitas }) => {
                                 <div className="space-y-6">
                                     <div className="relative">
                                         <TextInput
-                                            id="alamat"
+                                            id="tempat_lahir"
                                             type="text"
-                                            name="alamat"
-                                            value={data.alamat}
+                                            name="tempat_lahir"
+                                            value={data.tempat_lahir}
                                             onChange={(e) =>
                                                 setData(
-                                                    "alamat",
+                                                    "tempat_lahir",
                                                     e.target.value
                                                 )
                                             }
-                                            label="Alamat"
-                                            errorMessage={errors.alamat}
+                                            label="Tempat Lahir"
+                                            errorMessage={errors.tempat_lahir}
                                         />
                                     </div>
 
                                     <div className="relative">
                                         <TextInput
-                                            id="website"
+                                            id="alamat"
                                             type="text"
-                                            name="website"
-                                            value={data.website}
+                                            name="alamat"
+                                            value={data.alamat}
                                             onChange={(e) =>
-                                                setData(
-                                                    "website",
-                                                    e.target.value
-                                                )
+                                                setData("alamat", e.target.value)
                                             }
-                                            label="Website"
-                                            errorMessage={errors.website}
+                                            label="Alamat"
+                                            errorMessage={errors.alamat}
                                         />
                                     </div>
 
@@ -222,10 +233,7 @@ const Index = ({ auth, identitas }) => {
                                             name="telepon"
                                             value={data.telepon}
                                             onChange={(e) =>
-                                                setData(
-                                                    "telepon",
-                                                    e.target.value
-                                                )
+                                                setData("telepon", e.target.value)
                                             }
                                             label="Telepon"
                                             errorMessage={errors.telepon}
