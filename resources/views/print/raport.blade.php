@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Hasil Belajar Siswa - MTs Rekayasa</title>
     <style>
         @page {
-            size: A3;
+            size: A2;
+            /* Mengubah ukuran ke A2 (420mm x 594mm) */
             margin: 0;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.4;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: #fff;
@@ -20,65 +22,72 @@
         }
 
         .container {
-            width: 210mm;
-            min-height: 297mm;
+            min-height: 594mm;
+            /* Tinggi A2 */
             margin: 0 auto;
             background: white;
-            padding: 20mm;
+            padding: 40mm;
+            /* Padding lebih besar untuk A2 */
             box-sizing: border-box;
-            position: relative;
+            /* position: relative; */
         }
 
         .header {
             text-align: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
         }
 
         .logo {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 8px;
+            width: 150px;
+            /* Logo lebih besar */
+            height: 150px;
+            margin-bottom: 20px;
         }
 
         .school-title {
-            font-size: 20px;
+            font-size: 48px;
+            /* Font lebih besar */
             font-weight: bold;
             color: #2c3e50;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
         .school-info {
-            font-size: 11px;
+            font-size: 24px;
+            /* Font lebih besar */
             color: #6c757d;
-            margin-bottom: 2px;
-            line-height: 1.3;
+            margin-bottom: 5px;
+            line-height: 1.4;
         }
 
         .report-title {
-            font-size: 16px;
+            font-size: 36px;
+            /* Font lebih besar */
             font-weight: bold;
             color: #2c3e50;
-            margin: 15px 0;
+            margin: 40px 0;
             text-align: center;
-            padding: 6px;
+            padding: 15px;
             background: #f8f9fa;
         }
 
         .student-info {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 40px;
         }
 
         .student-info td {
-            padding: 6px 10px;
-            border: 1px solid #dee2e6;
-            font-size: 12px;
+            padding: 15px 25px;
+            border: 2px solid #dee2e6;
+            font-size: 24px;
+            /* Font lebih besar */
         }
 
         .student-info td:first-child {
-            width: 150px;
+            width: 300px;
+            /* Kolom lebih lebar */
             background-color: #f8f9fa;
             font-weight: 600;
         }
@@ -86,14 +95,16 @@
         .grades-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 40px;
         }
 
-        .grades-table th, .grades-table td {
-            border: 1px solid #dee2e6;
-            padding: 8px 6px;
+        .grades-table th,
+        .grades-table td {
+            border: 2px solid #dee2e6;
+            padding: 20px 15px;
             text-align: center;
-            font-size: 12px;
+            font-size: 24px;
+            /* Font lebih besar */
         }
 
         .grades-table th {
@@ -102,68 +113,49 @@
             color: #333;
         }
 
+        .grades-table td[style*="text-align: left"] {
+            padding-left: 25px;
+        }
+
         .attendance-section {
-            margin: 15px 0;
+            margin: 40px 0;
         }
 
         .attendance-section h3 {
             color: #2c3e50;
-            margin: 10px 0;
-            font-size: 14px;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 5px;
+            margin: 20px 0;
+            font-size: 30px;
+            /* Font lebih besar */
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
         }
 
         .attendance-info td {
-            padding: 4px 10px;
-            font-size: 12px;
+            padding: 15px 25px;
+            font-size: 24px;
+            /* Font lebih besar */
         }
 
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            position: absolute;
-            bottom: 40px;
-            left: 20mm;
-            right: 20mm;
-        }
-
-        .signature-box {
-            text-align: center;
-            width: 180px;
-        }
-
-        .signature-box p {
-            font-size: 12px;
-            margin: 5px 0;
-        }
-
-        .signature-line {
-            border-bottom: 1px solid #000;
-            margin-top: 40px;
-            margin-bottom: 5px;
-        }
-
-        @media print {
+       
+        /* @media print {
             body {
                 margin: 0;
                 padding: 0;
             }
             
             .container {
-                width: 210mm;
-                min-height: 297mm;
-                padding: 20mm;
+                min-height: 594mm;
+                padding: 40mm;
                 margin: 0 auto;
             }
-        }
+        } */
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <img src="/api/placeholder/60/60" alt="Logo Sekolah" class="logo">
+            <img src="/api/placeholder/150/150" alt="Logo Sekolah" class="logo">
             <div class="school-title">MTs Rekayasa</div>
             <div class="school-info">NPSN: 69354090 | NSS: 12345678</div>
             <div class="school-info">Jl. Raya Indonesia, Banjar</div>
@@ -196,7 +188,7 @@
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
-                    <th rowspan="2" style="width: 200px;">Mata Pelajaran</th>
+                    <th rowspan="2" style="width: 400px;">Mata Pelajaran</th>
                     <th colspan="2">Nilai</th>
                     <th rowspan="2">Rata-rata</th>
                     <th rowspan="2">Predikat</th>
@@ -251,21 +243,7 @@
                 </tr>
             </table>
         </div>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                <p>Orang Tua/Wali</p>
-                <div class="signature-line"></div>
-                <p>(_________________)</p>
-            </div>
-            <div class="signature-box">
-                <p>Banjar, 15 Desember 2023</p>
-                <p>Wali Kelas</p>
-                <div class="signature-line"></div>
-                <p>(_________________)</p>
-                <p>NIP.</p>
-            </div>
-        </div>
     </div>
 </body>
+
 </html>
