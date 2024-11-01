@@ -8,6 +8,9 @@ use App\Http\Controllers\Guru\GuruDashboardController;
 use App\Http\Controllers\Guru\PenilaianController;
 use App\Http\Controllers\Guru\RekapNilaiController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\Siswa\SiswaDashboardController;
+use App\Http\Controllers\Siswa\SiswaKelasController;
+use App\Http\Controllers\Siswa\SiswaPembayaranController;
 use App\Http\Controllers\Staff\FeatureAdminController;
 use App\Http\Controllers\Staff\GuruController;
 use App\Http\Controllers\Staff\InformasiSekolahController;
@@ -35,9 +38,6 @@ Route::post('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftar
 Route::get('/login', [AuthController::class, 'login_page'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-
 
 Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
     Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard.staff');
@@ -176,4 +176,16 @@ Route::middleware('IsRole:guru')->prefix('guru')->group(function() {
     Route::get("/cetak-nilai", [CetakRaportController::class, 'index'])->name('guru.cetak.nilai');
     Route::get("/cetak-nilai/{siswaId}", [CetakRaportController::class, 'cetak_raport'])->name('guru.cetak.raport');
 
+});
+
+Route::middleware('IsRole:siswa')->prefix('siswa')->group(function(){
+    Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard.siswa');
+
+    // Sekelas Route
+    Route::get("/kelas", [SiswaKelasController::class, 'index'])->name('siswa.kelas.list');
+
+    // Pembayaran Route
+    Route::get('/pembayaran', [SiswaPembayaranController::class, 'index'])->name('siswa.pembayaran.list');
+    Route::get('/pembayaran', [SiswaPembayaranController::class, 'index'])->name('siswa.pembayaran.list');
+    Route::post('/pembayaran', [SiswaPembayaranController::class, 'store'])->name('siswa.pembayaran.store');
 });

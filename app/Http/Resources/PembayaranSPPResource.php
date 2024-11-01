@@ -23,6 +23,7 @@ class PembayaranSPPResource extends JsonResource
             'bukti_bayar' => $this->bukti_bayar && !(str_starts_with($this->bukti_bayar, 'http')) ?
             Storage::url($this->bukti_bayar) : $this->bukti_bayar,
             'tanggal_pembayaran' => (new Carbon($this->tanggal_pembayaran))->format('Y-m-d'),
+            'deskripsi' => $this->deskripsi,
             'status_pembayaran' => $this->status_pembayaran,
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d'),

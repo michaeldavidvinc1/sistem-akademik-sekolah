@@ -14,10 +14,28 @@ import React, { useState } from "react";
 
 const MenuSiswa = [
     {
-        id: "dashboard.guru",
-        label: "Dashboard Siswa",
-        path: route("dashboard.guru"),
+        id: "dashboard.siswa",
+        label: "Dashboard",
+        path: route("dashboard.siswa"),
         icon: <LayoutDashboard className="w-5" />,
+    },
+    {
+        id: "siswa.kelas.list",
+        label: "Kelas",
+        path: route("siswa.kelas.list"),
+        icon: <UsersRound className="w-5" />,
+    },
+    {
+        id: "siswa.pembayaran.list",
+        label: "Pembayaran",
+        path: route("siswa.pembayaran.list"),
+        icon: <HandCoins className="w-5" />,
+    },
+    {
+        id: "dashboard.siswa",
+        label: "Absensi",
+        path: route("dashboard.siswa"),
+        icon: <Calendar className="w-5" />,
     },
 ];
 

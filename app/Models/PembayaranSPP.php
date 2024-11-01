@@ -14,6 +14,11 @@ class PembayaranSPP extends Model
         'tanggal_pembayaran',
         'jumlah',
         'bukti_bayar',
+        'deskripsi',
         'status_pembayaran',
     ];
+
+    public function siswa(){
+        return $this->belongsTo(Siswa::class);
+    }
 }
