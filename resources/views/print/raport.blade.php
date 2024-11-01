@@ -22,7 +22,7 @@
         }
 
         .container {
-            min-height: 594mm;
+            /* min-height: 594mm; */
             /* Tinggi A2 */
             margin: 0 auto;
             background: white;
@@ -41,9 +41,9 @@
 
         .logo {
             width: 150px;
-            /* Logo lebih besar */
             height: 150px;
             margin-bottom: 20px;
+            border-radius: 50%;
         }
 
         .school-title {
@@ -136,7 +136,11 @@
             /* Font lebih besar */
         }
 
-       
+        .page-break {
+            page-break-after: always;
+        }
+
+
         /* @media print {
             body {
                 margin: 0;
@@ -155,12 +159,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="/api/placeholder/150/150" alt="Logo Sekolah" class="logo">
-            <div class="school-title">MTs Rekayasa</div>
-            <div class="school-info">NPSN: 69354090 | NSS: 12345678</div>
-            <div class="school-info">Jl. Raya Indonesia, Banjar</div>
-            <div class="school-info">Telepon: | Kode Pos: 46385</div>
-            <div class="school-info">Email: mts-rekayasa@gmail.com</div>
+            <img src="{{ $image }}" alt="Logo Sekolah" class="logo">
+            <div class="school-title">{{ $identitasSekolah->nama_sekolah }}</div>
+            <div class="school-info">NPSN: {{ $identitasSekolah->npsn }} | NIS: {{ $identitasSekolah->nis }}</div>
+            <div class="school-info">{{ $identitasSekolah->alamat }}</div>
+            <div class="school-info">Telepon: {{ $identitasSekolah->telepon }} | Kode Pos:
+                {{ $identitasSekolah->kode_pos }}</div>
+            <div class="school-info">Email: {{ $identitasSekolah->email }}</div>
         </div>
 
         <h1 class="report-title">LAPORAN HASIL BELAJAR SISWA</h1>
@@ -168,61 +173,67 @@
         <table class="student-info">
             <tr>
                 <td>Nama Peserta Didik</td>
-                <td>: ELFAN SAPUTRA</td>
+                <td>: {{ $siswa->nama_lengkap }}</td>
             </tr>
             <tr>
                 <td>NISN/NIS</td>
                 <td>: 3035423424 / 024342412</td>
             </tr>
             <tr>
-                <td>Kelas/Semester</td>
-                <td>: VII / Ganjil</td>
+                <td>Kelas/Jurusan</td>
+                <td>: {{ $siswa->kelas->nama_kelas }} / {{ $siswa->jurusan->nama_jurusan }}</td>
             </tr>
             <tr>
                 <td>Tahun Pelajaran</td>
                 <td>: 2023/2024</td>
             </tr>
         </table>
-
         <table class="grades-table">
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
                     <th rowspan="2" style="width: 400px;">Mata Pelajaran</th>
                     <th colspan="2">Nilai</th>
-                    <th rowspan="2">Rata-rata</th>
                     <th rowspan="2">Predikat</th>
+                    <th rowspan="2">LULUS</th>
                 </tr>
                 <tr>
-                    <th>Pengetahuan</th>
-                    <th>Keterampilan</th>
+                    <th>KKM</th>
+                    <th>Nilai Akhir</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td style="text-align: left">Pendidikan Agama Islam</td>
-                    <td>85</td>
-                    <td>88</td>
-                    <td>86.5</td>
-                    <td>A</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td style="text-align: left">Bahasa Indonesia</td>
-                    <td>82</td>
-                    <td>85</td>
-                    <td>83.5</td>
-                    <td>B</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td style="text-align: left">Matematika</td>
-                    <td>78</td>
-                    <td>80</td>
-                    <td>79</td>
-                    <td>B</td>
-                </tr>
+                @foreach ($nilai[0]['mata_pelajaran'] as $subject => $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td style="text-align: left">{{ ucwords(str_replace('_', ' ', $subject)) }}</td>
+                        <td>{{ $item['kkm'] }}</td>
+                        <td>{{ $item['rata_rata'] }}</td>
+                        <td>
+                            @php
+                                $average = $item['rata_rata'];
+                                $grade = '';
+                                if ($average >= 85) {
+                                    $grade = 'A';
+                                } elseif ($average >= 70) {
+                                    $grade = 'B';
+                                } elseif ($average >= 60) {
+                                    $grade = 'C';
+                                } else {
+                                    $grade = 'D';
+                                }
+                            @endphp
+                            {{ $grade }}
+                        </td>
+                        <td>
+                            @if ($item['rata_rata'] >= $item['kkm'])
+                                Lulus
+                            @else
+                                Tidak Lulus
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
 
@@ -231,19 +242,20 @@
             <table class="student-info attendance-info">
                 <tr>
                     <td>Sakit</td>
-                    <td>: 2 hari</td>
+                    <td>: {{ $sakit }} hari</td>
                 </tr>
                 <tr>
                     <td>Izin</td>
-                    <td>: 1 hari</td>
+                    <td>: {{ $izin }} hari</td>
                 </tr>
                 <tr>
                     <td>Tanpa Keterangan</td>
-                    <td>: 0 hari</td>
+                    <td>: {{ $alpha }} hari</td>
                 </tr>
             </table>
         </div>
     </div>
+    {{-- <div class="page-break"></div> --}}
 </body>
 
 </html>

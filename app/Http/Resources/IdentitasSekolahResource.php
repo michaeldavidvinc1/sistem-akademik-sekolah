@@ -26,7 +26,7 @@ class IdentitasSekolahResource extends JsonResource
             'email' => $this->email,
             'telepon' => $this->telepon,
             'logo' => $this->logo && !(str_starts_with($this->logo, 'http')) ?
-            Storage::url($this->logo) : $this->logo,
+                url(Storage::url($this->logo)) : $this->logo,
         ];
     }
 }

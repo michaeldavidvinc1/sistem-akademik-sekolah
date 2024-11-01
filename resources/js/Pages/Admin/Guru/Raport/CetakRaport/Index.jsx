@@ -42,8 +42,6 @@ const Index = ({ auth, kelas, queryParams = null, siswaDenganNilai }) => {
         siswaDenganNilai?.[0]?.mata_pelajaran ?? {}
     );
 
-    console.log(queryParams);
-
     const handleResetFilters = () => {
         router.get(route("guru.cetak.nilai"), {});
     };
