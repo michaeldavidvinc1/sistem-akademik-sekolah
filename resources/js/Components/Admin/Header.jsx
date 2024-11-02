@@ -1,4 +1,4 @@
-import { LogOut, PanelRightOpen, Users } from "lucide-react";
+import { LogOut, PanelRightOpen, UserPen, Users } from "lucide-react";
 import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
@@ -11,25 +11,9 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { MenuItems } from "./Sidebar";
-import { router } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 
 const DashboardHeader = ({ setOpen, auth }) => {
-    const items = [
-        {
-            label: "Options",
-            items: [
-                {
-                    label: "Profile",
-                    icon: <Users className="w-4 mr-3" />,
-                    // command: () => console.log("first"),
-                },
-                {
-                    label: "Logout",
-                    icon: <LogOut className="w-4 mr-3" />,
-                },
-            ],
-        },
-    ];
     const handleLogout = () => {
         router.post(route("logout"));
     };
@@ -50,7 +34,7 @@ const DashboardHeader = ({ setOpen, auth }) => {
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center">
                                     <h1 className="text-md font-extrabold font-poppins">
-                                        Shopease
+                                        Sistem Akademik
                                     </h1>
                                 </div>
                             </div>
@@ -72,9 +56,14 @@ const DashboardHeader = ({ setOpen, auth }) => {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
-                            <DropdownMenuItem>Team</DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link
+                                    href={route("profile.index")}
+                                    className="flex items-center gap-2"
+                                >
+                                    <UserPen className="w-4" /> Profile
+                                </Link>
+                            </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <div
                                     className="text-red-500 cursor-pointer flex items-center gap-2"

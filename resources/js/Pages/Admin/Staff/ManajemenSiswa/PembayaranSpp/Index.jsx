@@ -36,7 +36,7 @@ const Index = ({ auth, pembayaran, jurusan, queryParams = null }) => {
     return (
         <DashboardLayout auth={auth}>
             <div className="flex justify-between items-center pb-5">
-                <h1 className="text-xl font-semibold">Pembayaran SPP List</h1>
+                <h1 className="text-xl font-semibold">Pembayaran List</h1>
             </div>
             <div className="mb-5">
                 <div className="flex justify-end gap-2 items-center">

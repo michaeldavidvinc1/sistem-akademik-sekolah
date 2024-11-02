@@ -32,9 +32,9 @@ const MenuSiswa = [
         icon: <HandCoins className="w-5" />,
     },
     {
-        id: "dashboard.siswa",
+        id: "siswa.absensi.list",
         label: "Absensi",
-        path: route("dashboard.siswa"),
+        path: route("siswa.absensi.list"),
         icon: <Calendar className="w-5" />,
     },
 ];
@@ -42,7 +42,7 @@ const MenuSiswa = [
 const MenuStaff = [
     {
         id: "dashboard.staff",
-        label: "Dashboard Staff",
+        label: "Dashboard",
         path: route("dashboard.staff"),
         icon: <LayoutDashboard className="w-5" />,
     },
@@ -112,7 +112,7 @@ const MenuStaff = [
             },
             {
                 id: "staff.pembayaran.list",
-                label: "Pembayaran SPP",
+                label: "Pembayaran",
                 path: route("staff.pembayaran.list"),
             },
         ],
@@ -144,7 +144,7 @@ const MenuStaff = [
 const MenuGuru = [
     {
         id: "dashboard.guru",
-        label: "Dashboard Guru",
+        label: "Dashboard",
         path: route("dashboard.guru"),
         icon: <LayoutDashboard className="w-5" />,
     },
@@ -281,11 +281,9 @@ const DashboardSidebar = ({ user, setOpen }) => {
         <>
             <aside className="hidden w-64 flex-col border-r bg-background py-6 px-4 lg:flex">
                 <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                        <h1 className="text-md font-extrabold font-poppins">
-                            Shopease
-                        </h1>
-                    </div>
+                    <h1 className="text-md font-extrabold font-poppins">
+                        Sistem Akademik
+                    </h1>
                 </div>
                 <MenuItems setOpen={setOpen} role={user.role} />
             </aside>

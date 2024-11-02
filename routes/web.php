@@ -8,6 +8,8 @@ use App\Http\Controllers\Guru\GuruDashboardController;
 use App\Http\Controllers\Guru\PenilaianController;
 use App\Http\Controllers\Guru\RekapNilaiController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Siswa\SiswaAbsensiController;
 use App\Http\Controllers\Siswa\SiswaDashboardController;
 use App\Http\Controllers\Siswa\SiswaKelasController;
 use App\Http\Controllers\Siswa\SiswaPembayaranController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Staff\MataPelajaranController;
 use App\Http\Controllers\Staff\SiswaController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\Staff\StaffDashboardController;
+use App\Http\Controllers\Staff\StaffInformasiController;
 use App\Http\Controllers\Staff\StaffPembayaranSppController;
 use App\Http\Controllers\Staff\StaffPendaftaranSiswaController;
 use App\Http\Controllers\Staff\StaffPenugasanGuruController;
@@ -38,6 +41,10 @@ Route::post('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftar
 Route::get('/login', [AuthController::class, 'login_page'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
+Route::post('/change-password', [ProfileController::class, 'change_password'])->name('profile.change.password')->middleware('auth');
+Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('profile.update')->middleware('auth');
 
 Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
     Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard.staff');
@@ -143,6 +150,7 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
 
     // Pembayaran SPP Siswa Route
     Route::get('/pembayaran-spp', [StaffPembayaranSppController::class, 'index'])->name('staff.pembayaran.list');
+    Route::get('/approve-pembayaran/{id}', [StaffPembayaranSppController::class, 'approve'])->name('staff.pembayaran.approve');
     
     // Informasi Sekolah Route
     Route::get('/informasi-sekolah', [InformasiSekolahController::class, 'index'])->name('staff.informasi.sekolah');
@@ -151,6 +159,10 @@ Route::middleware('IsRole:staff')->prefix('staff')->group(function () {
     // Kepala Sekolah Route
     Route::get('/kepala-sekolah', [KepalaSekolahController::class, 'index'])->name('staff.kepala.sekolah');
     Route::put('/kepala-sekolah', [KepalaSekolahController::class, 'update'])->name('staff.kepala.update');
+
+    // Informasi Route
+    Route::post("/informasi", [StaffInformasiController::class, 'store'])->name('staff.informasi.store');
+    Route::delete("/informasi/{id}", [StaffInformasiController::class, 'destroy'])->name('staff.informasi.destroy');
 
     
 });
@@ -186,6 +198,11 @@ Route::middleware('IsRole:siswa')->prefix('siswa')->group(function(){
 
     // Pembayaran Route
     Route::get('/pembayaran', [SiswaPembayaranController::class, 'index'])->name('siswa.pembayaran.list');
-    Route::get('/pembayaran', [SiswaPembayaranController::class, 'index'])->name('siswa.pembayaran.list');
     Route::post('/pembayaran', [SiswaPembayaranController::class, 'store'])->name('siswa.pembayaran.store');
+    Route::put('/pembayaran/{id}', [SiswaPembayaranController::class, 'update'])->name('siswa.pembayaran.update');
+    Route::delete('/pembayaran/{id}', [SiswaPembayaranController::class, 'destroy'])->name('siswa.pembayaran.destroy');
+
+    // Absensi Route
+    Route::get('/absensi', [SiswaAbsensiController::class, 'index'])->name('siswa.absensi.list');
+
 });

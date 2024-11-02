@@ -25,7 +25,7 @@ class PembayaranSPPResource extends JsonResource
             'tanggal_pembayaran' => (new Carbon($this->tanggal_pembayaran))->format('Y-m-d'),
             'deskripsi' => $this->deskripsi,
             'status_pembayaran' => $this->status_pembayaran,
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'created_at' => (new Carbon($this->created_at))->diffForHumans(),
             'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d'),
         ];
     }

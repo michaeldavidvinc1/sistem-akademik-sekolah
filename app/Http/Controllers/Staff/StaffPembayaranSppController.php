@@ -35,4 +35,10 @@ class StaffPembayaranSppController extends Controller
             'jurusan' => JurusanResource::collection($jurusan),
         ]);
     }
+
+    public function approve($id){
+        $data = PembayaranSPP::findOrFail($id);
+        $data->status_pembayaran = 'lunas';
+        $data->save();
+    }
 }

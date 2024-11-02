@@ -55,6 +55,25 @@ export const columns = [
         cell: ({ row }) => row.index + 1,
     },
     {
+        accessorKey: "bukti_bayar",
+        header: "Bukti Pembayaran",
+        cell: ({ row }) => {
+            const dataRow = row.original;
+            return (
+                <Dialog>
+                    <DialogTrigger>
+                        <img src={dataRow.bukti_bayar} alt="" width="50" className="rounded-sm" />
+                    </DialogTrigger>
+                    <DialogContent className="max-w-xl">
+                        <DialogHeader>
+                            <img src={dataRow.bukti_bayar} alt="" />
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
+            );
+        },
+    },
+    {
         accessorKey: "siswa.nama_lengkap",
         header: ({ column }) => {
             return (
@@ -76,8 +95,8 @@ export const columns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <Badge variant={data.status_pembayaran === 'lunas' ? "destructive" : "default"}>
-                    {data.status_pembayaran === 'lunas' ? "Inactive" : "Active"}
+                <Badge variant={data.status_pembayaran === 'belum lunas' ? "destructive" : "success"}>
+                    {data.status_pembayaran === 'belum lunas' ? "Pending" : "Success"}
                 </Badge>
             );
         },
@@ -87,66 +106,27 @@ export const columns = [
         header: "Tanggal Pembayaran",
     },
     {
+        accessorKey: "deskripsi",
+        header: "Deskripsi Pembayaran",
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             const dataRow = row.original;
             const { toast } = useToast();
-            const [seePassword, setSeePassword] = useState(false);
-            const { data, setData, post, errors, reset } = useForm({
-                password: "",
-                confirm_password: "",
-            });
-            const handleDelete = (id) => {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You cannot undo this data again!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Iya, Hapus",
-                    cancelButtonText: "Batal",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        router.delete(route("staff.guru.destroy", id), {
-                            onSuccess: () => {
-                                toast({
-                                    variant: "success",
-                                    title: "Success!",
-                                    description: "Delete data successfully.",
-                                });
-                            },
-                        });
-                    }
-                });
-            };
 
             const handleChangeStatus = (e) => {
                 e.preventDefault();
-                router.get(route('guru.change.status', dataRow.id), {}, {
+                router.get(route('staff.pembayaran.approve', dataRow.id), {}, {
                     onSuccess: () => {
                         toast({
                             variant: "success",
                             title: "Success!",
-                            description: "Change status successfully.",
+                            description: "Pembayaran approve.",
                         });
                     },
                 })
             }
-
-            const handleChangePassword = (e) => {
-                e.preventDefault();
-                post(route("guru.change.password", dataRow.id), {
-                    onSuccess: () => {
-                        reset('confirm_password', 'password'),
-                        toast({
-                            variant: "success",
-                            title: "Success!",
-                            description: "Change password successfully.",
-                        });
-                    },
-                });
-            };
 
             return (
                 <DropdownMenu>
@@ -158,147 +138,26 @@ export const columns = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onSelect={(event) => event.preventDefault()}
-                        >
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <span className=" flex gap-2 items-center cursor-pointer">
-                                        <FileLock2 className="w-4" /> Change
-                                        Password
-                                    </span>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-md">
-                                    <DialogHeader>
-                                        <DialogTitle>
-                                            Change Password
-                                        </DialogTitle>
-                                    </DialogHeader>
-                                    <div className="grid gap-4 py-4">
-                                        <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
-                                            <div className="relative">
-                                                <TextInput
-                                                    id="password"
-                                                    type={
-                                                        !seePassword
-                                                            ? "password"
-                                                            : "text"
-                                                    }
-                                                    name="password"
-                                                    value={data.password}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "password",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    label="Password"
-                                                    errorMessage={
-                                                        errors.password
-                                                    }
-                                                />
-                                                <span
-                                                    className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center cursor-pointer"
-                                                    onClick={() =>
-                                                        setSeePassword(
-                                                            !seePassword
-                                                        )
-                                                    }
-                                                    text
-                                                >
-                                                    {seePassword ? (
-                                                        <Eye className="w-5 h-5" />
-                                                    ) : (
-                                                        <EyeOff className="w-5 h-5" />
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <div className="relative">
-                                                <TextInput
-                                                    id="confirm_password"
-                                                    type={
-                                                        !seePassword
-                                                            ? "password"
-                                                            : "text"
-                                                    }
-                                                    name="password"
-                                                    value={
-                                                        data.confirm_password
-                                                    }
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "confirm_password",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    label="Confirm Password"
-                                                    errorMessage={
-                                                        errors.confirm_password
-                                                    }
-                                                />
-                                                <span
-                                                    className="absolute right-1 top-[47%] transform w-8 h-8 p-0 flex justify-center items-center cursor-pointer"
-                                                    onClick={() =>
-                                                        setSeePassword(
-                                                            !seePassword
-                                                        )
-                                                    }
-                                                    text
-                                                >
-                                                    {seePassword ? (
-                                                        <Eye className="w-5 h-5" />
-                                                    ) : (
-                                                        <EyeOff className="w-5 h-5" />
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-end items-center mt-6">
-                                                <Button type="submit">
-                                                    Update Password
-                                                </Button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Link
-                                href={route("staff.guru.edit", dataRow.id)}
+                                href={dataRow.status_pembayaran === 'lunas' ? "#" : route("staff.pembayaran.approve", dataRow.id)}
                                 className={`flex gap-2 items-center ${
-                                    data.status === 0
-                                        ? "text-green-500"
+                                    dataRow.status_pembayaran === 'lunas'
+                                        ? "text-green-500 pointer-events-none" // Disable the link
                                         : "text-red-500"
                                 }`}
-                                onClick={handleChangeStatus}
+                                onClick={dataRow.status_pembayaran === 'lunas' ? null : handleChangeStatus}
                             >
-                                {dataRow.status === 0 ? (
+                                {dataRow.status_pembayaran === 'lunas' ? (
                                     <>
-                                        <ShieldCheck className="w-4" /> Active
+                                        <ShieldCheck className="w-4" /> Sudah Bayar
                                     </>
                                 ) : (
                                     <>
-                                        <ShieldBan className="w-4" /> Inactive
+                                        <ShieldBan className="w-4" /> Approve
                                     </>
                                 )}
                             </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link
-                                href={route("staff.guru.edit", dataRow.id)}
-                                className=" flex gap-2 items-center "
-                            >
-                                <SquarePen className="w-4" /> Edit
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <span
-                                className=" flex gap-2 items-center cursor-pointer"
-                                onClick={() => handleDelete(dataRow.id)}
-                            >
-                                <Trash2 className="w-4" /> Delete
-                            </span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

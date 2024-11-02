@@ -63,11 +63,11 @@ const Index = ({ auth, pembayaran, queryParams = null }) => {
                                     <Input
                                         type="text"
                                         className="w-full"
-                                        value={queryParams?.namaLengkap}
-                                        placeholder="Filter Nama Lengkap"
+                                        value={queryParams?.deskripsi}
+                                        placeholder="Filter Deskripsi"
                                         onChange={(e) =>
                                             searchFieldChanged(
-                                                "namaLengkap",
+                                                "deskripsi",
                                                 e.target.value
                                             )
                                         }
