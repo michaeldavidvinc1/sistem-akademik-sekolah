@@ -16,12 +16,22 @@ class PembayaranSPPResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Mendapatkan path gambar jika ada di storage
+        $buktiBayarPath = $this->bukti_bayar && !(str_starts_with($this->bukti_bayar, 'http'))
+            ? storage_path('app/public/' . $this->bukti_bayar)
+            : null;
+
+        // Mengkonversi gambar ke base64 jika file gambar tersedia
+        $buktiBayarBase64 = null;
+        if ($buktiBayarPath && file_exists($buktiBayarPath)) {
+            $buktiBayarBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($buktiBayarPath));
+        }
+
         return [
             'id' => $this->id,
             'siswa' => new SiswaResource($this->whenLoaded('siswa')),
             'jumlah' => $this->jumlah,
-            'bukti_bayar' => $this->bukti_bayar && !(str_starts_with($this->bukti_bayar, 'http')) ?
-            Storage::url($this->bukti_bayar) : $this->bukti_bayar,
+            'bukti_bayar' => $buktiBayarBase64 ?? $this->bukti_bayar,
             'tanggal_pembayaran' => (new Carbon($this->tanggal_pembayaran))->format('Y-m-d'),
             'deskripsi' => $this->deskripsi,
             'status_pembayaran' => $this->status_pembayaran,

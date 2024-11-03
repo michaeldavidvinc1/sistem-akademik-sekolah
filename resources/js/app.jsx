@@ -8,7 +8,7 @@ import { Toaster } from "./Components/ui/toaster";
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
-    title: (title) => `${title}`,
+    title: (title) => `Sistem Akademik Sekolah`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.jsx`,

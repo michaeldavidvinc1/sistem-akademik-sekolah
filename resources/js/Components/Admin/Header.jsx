@@ -50,7 +50,7 @@ const DashboardHeader = ({ setOpen, auth }) => {
                     <DropdownMenu>
                         <DropdownMenuTrigger>
                             <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarImage src="/assets/user.jpg" />
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>

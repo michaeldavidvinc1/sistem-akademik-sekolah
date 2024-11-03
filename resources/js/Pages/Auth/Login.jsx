@@ -39,9 +39,6 @@ const Login = () => {
                 ></div>
                 <div className="flex items-center justify-center w-full lg:w-1/2 bg-gray-100">
                     <div className="bg-white p-8 rounded-lg shadow-md w-96">
-                        <div className="text-center">
-                            <h1>Logo/Icon</h1>
-                        </div>
                         <h1 className="text-2xl font-bold mb-6 text-center">
                             Login
                         </h1>
