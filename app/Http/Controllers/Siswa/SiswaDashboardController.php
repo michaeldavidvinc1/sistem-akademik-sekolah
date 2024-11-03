@@ -19,7 +19,7 @@ class SiswaDashboardController extends Controller
     public function index(){
         $siswaId = Siswa::with(['kelas', 'jurusan'])->where('user_id', Auth::user()->id)->first();
         $totalMapel = KelasMataPelajaran::where('kelas_id', '=', $siswaId->kelas_id)->count();
-        $pembayaranPending = PembayaranSPP::where('status_pembayaran', '=', 'belum lunas')->count();
+        $pembayaranPending = PembayaranSPP::where('status_pembayaran', '=', 'belum lunas')->where('siswa_id', '=', $siswaId->id)->count();
         $informasi = Informasi::with('user')->where('tujuan', '=', 'siswa')->latest()->take(3)->get();
         $pembayaran = PembayaranSPP::with('siswa.kelas')->where('status_pembayaran', '=', 'belum lunas')->where('siswa_id', '=', $siswaId->id)->latest()->take(3)->get();
         return Inertia::render('Admin/Siswa/Dashboard', [
