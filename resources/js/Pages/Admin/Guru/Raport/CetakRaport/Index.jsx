@@ -27,6 +27,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import axios from "axios";
 
 const Index = ({ auth, kelas, queryParams = null, siswaDenganNilai }) => {
     queryParams = queryParams || {};
@@ -47,7 +48,30 @@ const Index = ({ auth, kelas, queryParams = null, siswaDenganNilai }) => {
     };
 
     const handleCetakRaport = (siswaId) => {
-        router.get(route('guru.cetak.raport', siswaId));
+        axios.get(`/guru/cetak-nilai/${siswaId}`, { responseType: 'blob' })
+        .then((res) => {
+            const blob = new Blob([res.data], { type: res.headers['content-type'] });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+
+            // Check for a filename in the content-disposition header
+            const contentDisposition = res.headers['content-disposition'];
+            let filename = 'raport.pdf';
+            if (contentDisposition && contentDisposition.includes('filename=')) {
+                filename = contentDisposition
+                    .split('filename=')[1]
+                    .replace(/"/g, ''); // Remove quotes if they exist
+            }
+            link.download = filename;
+            link.click();
+
+            // Clean up
+            window.URL.revokeObjectURL(link.href);
+        })
+        .catch((error) => {
+            console.error("Failed to download PDF", error);
+        });
+        // router.get(route('guru.cetak.raport', siswaId));
     }
 
     return (

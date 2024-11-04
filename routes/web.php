@@ -39,7 +39,7 @@ Route::get('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftara
 Route::post('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftaran_store'])->name('pendaftaran.store');
 
 Route::get('/login', [AuthController::class, 'login_page'])->name('login')->middleware('guest');
-Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+Route::post('/login', [AuthController::class, 'login'])->name('login.store')->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
