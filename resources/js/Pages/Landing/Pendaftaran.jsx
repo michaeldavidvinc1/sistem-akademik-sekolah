@@ -10,10 +10,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { useForm } from "@inertiajs/react";
 import React from "react";
 
 const Pendaftaran = ({jurusan}) => {
+    const { toast } = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         nama_lengkap: "",
         tanggal_lahir: "",
@@ -35,6 +37,14 @@ const Pendaftaran = ({jurusan}) => {
                         description: errors.message,
                     });
                 }
+            },
+            onSuccess: () => {
+                console.log("asdads")
+                toast({
+                    variant: "success",
+                    title: "Success!",
+                    description: "Pendaftaran siswa baru berhasil!",
+                });
             },
         });
     };
