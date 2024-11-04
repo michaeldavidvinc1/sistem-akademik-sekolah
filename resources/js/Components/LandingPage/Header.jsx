@@ -14,7 +14,8 @@ const HeaderLandingPage = () => {
     const [visible, setVisible] = useState(false);
     return (
         <div className="container py-4 flex justify-between items-center shadow-sm">
-            <h1>Nama/Logo</h1>
+            <div></div>
+            {/* <h1>Nama/Logo</h1> */}
             {/* Dekstop */}
             <div className="hidden md:block">
                 <ul className="flex items-center gap-6">

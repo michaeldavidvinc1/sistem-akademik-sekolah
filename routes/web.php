@@ -38,7 +38,7 @@ Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fas
 Route::get('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftaran'])->name('pendaftaran');
 Route::post('/pendaftaran-siswa-baru', [LandingPageController::class, 'pendaftaran_store'])->name('pendaftaran.store');
 
-Route::get('/login', [AuthController::class, 'login_page'])->name('login');
+Route::get('/login', [AuthController::class, 'login_page'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
