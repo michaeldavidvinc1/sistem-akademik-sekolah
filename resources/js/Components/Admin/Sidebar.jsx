@@ -218,7 +218,7 @@ export function MenuItems({ setOpen, role }) {
                     (menuItem.children &&
                         menuItem.children.some(
                             (child) => route().current() === child.id
-                        )); // Memeriksa apakah menu item induk aktif atau salah satu anaknya aktif
+                        )); 
                 return (
                     <div
                         key={menuItem.id}
